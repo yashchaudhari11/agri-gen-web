@@ -3,11 +3,13 @@ import './globals.css';
 export const metadata = {
   title: 'AGRI-GEN | House of Organic Agri-Products',
   description:
-    'AGRI-GEN is a premier organic agri-products business connecting 1200+ farmers across 50+ districts with 500+ certified organic products.',
+  'AGRI-GEN is a premier organic agri-products business connecting 1200+ farmers across 50+ districts with 500+ certified organic products.',
+  icons: '/images/favicon.png',
   keywords: 'organic, agri-products, farmers, spices, nutraceuticals, green formulation, agro-commodities',
   openGraph: {
     title: 'AGRI-GEN | House of Organic Agri-Products',
     description: 'Connecting farmers, delivering organic excellence.',
+    icons: '/images/favicon.png',
     type: 'website',
   },
 };
