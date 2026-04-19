@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #ffffff;
+  --accent: #4ade80;
+  --card: #f8fafc;
+  --card2: #f1f5f9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #ffffff;
+  color: #111827;
+  font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #4ade80;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}
+
+/* Selection color */
+::selection {
+  background: #4ade80;
+  color: #0a0a0a;
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Outfit', sans-serif;
+  }
+  .font-mono-custom {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .bg-glass {
+    background: rgba(17, 17, 17, 0.9);
+    backdrop-filter: blur(12px);
+  }
+  .border-glow {
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.15);
+  }
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    border-color: rgba(74, 222, 128, 0.4);
+    box-shadow: 0 8px 32px rgba(74, 222, 128, 0.1);
+  }
+  .green-glow {
+    box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
+  }
+}
+
+/* Material Symbols & New Home Styles */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.dna-pattern {
+  background-image: radial-gradient(circle at 2px 2px, rgba(111, 177, 13, 0.05) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.leaf-clip {
+  border-top-left-radius: 80px;
+  border-bottom-right-radius: 80px;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+}
+
+@keyframes shine {
+  0% {
+    left: -60%;
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.4;
+  }
+  100% {
+    left: 120%;
+    opacity: 0;
+  }
+}
