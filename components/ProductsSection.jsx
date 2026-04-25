@@ -2,8 +2,9 @@
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
-import { Search, ShoppingBag } from 'lucide-react';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
 import { products } from '@/lib/products-data';
 
 const categories = [
@@ -15,11 +16,18 @@ const categories = [
   'Green Formulation',
 ];
 
-function ProductCard({ product }) {
+const bestsellerIds = [1, 3, 6, 8];
+const highYieldIds = [4, 7, 10];
+
+function ProductCard({ product, t, locale }) {
+  const prefix = locale === 'en' ? '' : `/${locale}`;
+  const isBestseller = bestsellerIds.includes(product.id);
+  const isHighYield = highYieldIds.includes(product.id);
+
   return (
-    <div className="group bg-ag-card border border-gray-200 rounded-2xl overflow-hidden hover:border-ag-green/40 hover:shadow-lg hover:shadow-ag-green/10 transition-all duration-300 flex flex-col">
+    <div className="group bg-white border-2 border-kisan-green/10 rounded-kisan overflow-hidden hover:border-kisan-green/30 hover:shadow-kisan-lg transition-all duration-300 flex flex-col">
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-52 overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
@@ -27,25 +35,44 @@ function ProductCard({ product }) {
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-50/80 to-transparent" />
-        <div className="absolute top-3 left-3 bg-ag-green/15 border border-ag-green/30 text-ag-green text-xs font-semibold px-3 py-1 rounded-full">
-          {product.category}
+        <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
+
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+          <span className="bg-kisan-green/90 text-white text-[10px] font-bold px-3 py-1 rounded-full">
+            {product.category}
+          </span>
+          {isBestseller && (
+            <span className="badge-bestseller animate-badge-shine">
+              ⭐ {t('bestseller')}
+            </span>
+          )}
+          {isHighYield && (
+            <span className="badge-highyield">
+              📈 {t('highYield')}
+            </span>
+          )}
         </div>
       </div>
 
       {/* Content */}
       <div className="p-5 flex flex-col gap-3 flex-grow">
-        <h3 className="font-display font-bold text-gray-900 text-base leading-tight">{product.name}</h3>
-        <p className="text-gray-600 text-xs leading-relaxed flex-grow line-clamp-2">{product.description}</p>
+        <h3 className="font-headline font-bold text-pure-black text-base leading-tight">
+          {product.name}
+        </h3>
+        <p className="text-text-secondary text-xs leading-relaxed flex-grow line-clamp-2">
+          {product.description}
+        </p>
         <div className="flex items-center justify-between pt-1">
-          <span className="text-ag-green font-bold text-sm">{product.price}</span>
+          <span className="text-kisan-green font-extrabold text-lg">
+            {product.price}
+          </span>
         </div>
-        <Link 
-          href={`/products/${product.id}`}
-          className="w-full border border-ag-green/50 text-ag-green text-sm font-semibold py-2.5 rounded-full hover:bg-ag-green hover:text-gray-900 hover:border-ag-green transition-all duration-200 flex items-center justify-center gap-2 mt-auto"
+        <Link
+          href={`${prefix}/products/${product.id}`}
+          className="w-full bg-kisan-green text-white text-sm font-bold py-3 rounded-2xl btn-3d shadow-3d hover:shadow-3d-hover transition-all duration-200 flex items-center justify-center gap-2 mt-auto touch-target"
         >
-          <ShoppingBag size={14} />
-          Enquire Now
+          📞 {t('enquire')}
         </Link>
       </div>
     </div>
@@ -55,10 +82,13 @@ function ProductCard({ product }) {
 export default function ProductsSection() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All Products');
+  const t = useTranslations('products');
+  const locale = useLocale();
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
-      const matchCat = activeCategory === 'All Products' || p.category === activeCategory;
+      const matchCat =
+        activeCategory === 'All Products' || p.category === activeCategory;
       const matchSearch =
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.description.toLowerCase().includes(search.toLowerCase());
@@ -67,29 +97,29 @@ export default function ProductsSection() {
   }, [search, activeCategory]);
 
   return (
-    <section id="products" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="products" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="text-center mb-10">
-        <div className="text-ag-green text-sm font-semibold tracking-widest uppercase mb-3">
-          — Our Range
-        </div>
-        <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-gray-900">
-          Explore Products
+        <span className="text-kisan-green text-sm font-bold tracking-widest uppercase mb-3 inline-block">
+          🌿 {t('subtitle')}
+        </span>
+        <h2 className="font-headline font-extrabold text-3xl sm:text-4xl lg:text-5xl text-pure-black">
+          {t('title')}
         </h2>
       </div>
 
       {/* Search */}
       <div className="relative max-w-md mx-auto mb-8">
         <Search
-          size={16}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600"
+          size={18}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
         />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search products..."
-          className="w-full bg-ag-card border border-gray-200 text-gray-900 placeholder-gray-400 text-sm pl-11 pr-5 py-3.5 rounded-full focus:outline-none focus:border-ag-green/60 focus:shadow-lg focus:shadow-ag-green/10 transition-all duration-200"
+          placeholder={t('search')}
+          className="w-full bg-cream border-2 border-kisan-green/10 text-text-primary placeholder-text-muted text-sm pl-11 pr-5 py-4 rounded-2xl focus:outline-none focus:border-kisan-green/40 focus:shadow-kisan transition-all duration-200 touch-target"
         />
       </div>
 
@@ -99,13 +129,13 @@ export default function ProductsSection() {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 text-xs sm:text-sm font-semibold rounded-full border transition-all duration-200 ${
+            className={`px-5 py-3 text-xs sm:text-sm font-bold rounded-2xl border-2 transition-all duration-200 touch-target ${
               activeCategory === cat
-                ? 'bg-ag-green text-gray-900 border-ag-green shadow-lg shadow-ag-green/20'
-                : 'bg-transparent text-gray-600 border-gray-200 hover:border-ag-green/40 hover:text-ag-green'
+                ? 'bg-kisan-green text-white border-kisan-green shadow-3d'
+                : 'bg-white text-text-secondary border-kisan-green/10 hover:border-kisan-green/30 hover:text-kisan-green'
             }`}
           >
-            {cat}
+            {cat === 'All Products' ? t('allProducts') : cat}
           </button>
         ))}
       </div>
@@ -114,11 +144,16 @@ export default function ProductsSection() {
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              t={t}
+              locale={locale}
+            />
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 text-gray-600">
+        <div className="text-center py-20 text-text-secondary">
           <div className="text-4xl mb-3">🌿</div>
           <p className="text-sm">No products found. Try a different search or filter.</p>
         </div>

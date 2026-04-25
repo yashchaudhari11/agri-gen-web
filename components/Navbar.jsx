@@ -3,19 +3,25 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Menu, X, Leaf } from 'lucide-react';
-
-const navLinks = [
-  { label: 'HOME', href: '/' },
-  { label: 'ABOUT US', href: '/about' },
-  { label: 'MISSION & VISION', href: '/mission-vision' },
-  { label: 'PRODUCTS', href: '/products' },
-];
+import { useTranslations, useLocale } from 'next-intl';
+import { Menu, X } from 'lucide-react';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations('nav');
+  const locale = useLocale();
+
+  const prefix = locale === 'en' ? '' : `/${locale}`;
+
+  const navLinks = [
+    { label: t('home'), href: `${prefix}/` },
+    { label: t('about'), href: `${prefix}/about` },
+    { label: t('mission'), href: `${prefix}/mission-vision` },
+    { label: t('products'), href: `${prefix}/products` },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -29,76 +35,103 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/90 backdrop-blur-xl shadow-lg shadow-gray-200/50'
-          : 'bg-white/90 backdrop-blur-md'
-      } border-b border-gray-200`}
+          ? 'bg-cream/95 backdrop-blur-xl shadow-lg shadow-earth-brown/5'
+          : 'bg-cream/90 backdrop-blur-md'
+      } border-b border-kisan-green/10`}
+      id="main-nav"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <img src="/images/nav_logo.png" alt="AGRI-GEN Logo" className="h-auto w-40 object-contain transition-transform duration-300 group-hover:scale-105" />
+          <Link href={`${prefix}/`} className="flex items-center gap-3 group">
+            <img
+              src="/images/nav_logo.png"
+              alt="AGRI-GEN Innovation Logo"
+              className="h-auto w-36 sm:w-40 object-contain transition-transform duration-300 group-hover:scale-105"
+            />
           </Link>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive =
+                pathname === link.href ||
+                (link.href !== `${prefix}/` &&
+                  pathname.startsWith(link.href));
               return (
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`text-md font-medium transition-colors duration-200 relative group ${
-                    isActive ? 'text-[#3f6900]' : 'text-gray-600 hover:text-[#3f6900]'
+                  className={`text-sm font-bold transition-colors duration-200 relative group touch-target flex items-center ${
+                    isActive
+                      ? 'text-kisan-green'
+                      : 'text-text-secondary hover:text-kisan-green'
                   }`}
                 >
                   {link.label}
-                  <span className={`absolute -bottom-1 left-0 h-0.5 bg-[#3f6900] transition-all duration-300 ${
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`} />
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-kisan-green transition-all duration-300 ${
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}
+                  />
                 </Link>
               );
             })}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
+          {/* Right side: Language Toggle + CTA */}
+          <div className="hidden lg:flex items-center gap-3">
+            <LanguageSwitcher variant="compact" />
             <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-[#3f6900] text-white font-bold text-sm px-5 py-2.5 rounded-full hover:scale-105 transition-all shadow-lg shadow-[#3f6900]/20"
+              href={`${prefix}/contact`}
+              className="inline-flex items-center gap-2 bg-kisan-green text-white font-bold text-sm px-5 py-3 rounded-2xl btn-3d shadow-3d hover:shadow-3d-hover transition-all"
+              id="nav-enquire-btn"
             >
-              <Leaf size={14} />
-              CONTACT US
+              <span className="material-symbols-outlined text-lg">
+                call
+              </span>
+              {t('enquire')}
             </Link>
           </div>
 
           {/* Mobile Hamburger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:text-ag-green hover:bg-gray-100/50 transition-all duration-200"
+            className="lg:hidden p-2.5 rounded-xl text-text-secondary hover:text-kisan-green hover:bg-cream transition-all duration-200 touch-target"
             aria-label="Toggle menu"
+            id="mobile-menu-toggle"
           >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden transition-all duration-300 overflow-hidden ${
-          isOpen ? 'max-h-72 opacity-100' : 'max-h-0 opacity-0'
+        className={`lg:hidden transition-all duration-300 overflow-hidden ${
+          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="border-t border-gray-200 bg-white/90 px-4 py-4 flex flex-col gap-1">
+        <div className="border-t border-kisan-green/10 bg-cream px-4 py-4 flex flex-col gap-1">
+          {/* Language Switcher — First item in mobile menu */}
+          <div className="mb-3 pb-3 border-b border-kisan-green/10">
+            <LanguageSwitcher variant="compact" />
+          </div>
+
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive =
+              pathname === link.href ||
+              (link.href !== `${prefix}/` &&
+                pathname.startsWith(link.href));
             return (
               <Link
                 key={link.label}
                 href={link.href}
                 onClick={handleLinkClick}
-                className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive ? 'text-[#3f6900] bg-gray-100/50' : 'text-gray-600 hover:text-[#3f6900] hover:bg-gray-100/50'
+                className={`px-4 py-3.5 rounded-xl text-sm font-bold transition-all duration-200 touch-target ${
+                  isActive
+                    ? 'text-kisan-green bg-kisan-green/5'
+                    : 'text-text-secondary hover:text-kisan-green hover:bg-cream-dark'
                 }`}
               >
                 {link.label}
@@ -106,11 +139,11 @@ export default function Navbar() {
             );
           })}
           <Link
-            href="/contact"
+            href={`${prefix}/contact`}
             onClick={handleLinkClick}
-            className="mt-2 bg-[#3f6900] text-white font-bold text-sm px-5 py-3 rounded-full text-center hover:bg-green-300 transition-all duration-200"
+            className="mt-2 bg-kisan-green text-white font-bold text-sm px-5 py-3.5 rounded-2xl text-center btn-3d shadow-3d transition-all duration-200 touch-target"
           >
-            CONTACT US
+            📞 {t('enquire')}
           </Link>
         </div>
       </div>

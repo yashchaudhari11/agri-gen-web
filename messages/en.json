@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "home": "HOME",
+    "about": "ABOUT US",
+    "mission": "MISSION & VISION",
+    "products": "PRODUCTS",
+    "contact": "CONTACT US",
+    "enquire": "Enquire Now"
+  },
+  "hero": {
+    "badge": "Certified Organic Agri-Inputs",
+    "title": "A House of",
+    "titleHighlight": "Organic Products",
+    "subtitle": "कृषी-जेन इनोव्हेशन — शेतकऱ्यांसाठी सेंद्रिय उत्पादने",
+    "description": "At Agri-Gen Innovation, we bring together agriculture and advanced science — integrating genetics, technology, and smart farming to develop innovative solutions for sustainable agriculture.",
+    "cta1": "Enquire Now",
+    "cta2": "Our Products",
+    "isoCertified": "ISO 9001:2015 Certified",
+    "whatsappCta": "WhatsApp for Advice"
+  },
+  "trust": {
+    "certifiedOrganic": "Certified Organic",
+    "certifiedOrganicDesc": "प्रमाणित सेंद्रिय",
+    "farmers": "1200+ Farmers",
+    "farmersDesc": "शेतकरी",
+    "districts": "50+ Districts",
+    "districtsDesc": "जिल्हे",
+    "products": "500+ Products",
+    "productsDesc": "उत्पादने",
+    "isoQuality": "ISO 9001:2015",
+    "isoQualityDesc": "Certified Quality"
+  },
+  "business": {
+    "title": "Dual-Engine Business Ecosystem",
+    "description": "As a leading agricultural manufacturing and marketing company, we specialize in certified organic inputs while dedicated to supporting farmers with products that enhance soil health and contribute to healthier, more sustainable food systems.",
+    "b2bTitle": "B2B Raw Material Supply",
+    "b2bDesc": "Strategic partners for manufacturers. We provide high-purity raw materials and formulations for industrial agro-chemical and bio-input production.",
+    "b2cTitle": "B2C & Farmer Focused",
+    "b2cDesc": "Direct solutions for the land. Custom-labeled, branded finished products designed specifically for regional farmer needs and high-yield results."
+  },
+  "values": {
+    "title": "Our Core Values",
+    "subtitle": "The fundamental principles that guide every action we take and every innovation we deliver for the farming community.",
+    "quality": "Quality Without Compromise",
+    "trust": "Trust",
+    "accountability": "Accountability",
+    "honouring": "Honouring Everyone",
+    "environmental": "Environmental & Social Responsibility"
+  },
+  "purpose": {
+    "title": "Delivering Excellence that Brings Smiles to Farmers",
+    "quote": "Our true success isn't measured in revenue, but in the prosperity of the hands that feed the world.",
+    "smiles": "Smiles to Farmers",
+    "smilesLocal": "शेतकऱ्यांचे हास्य"
+  },
+  "farmerStories": {
+    "title": "Farmer Stories",
+    "subtitle": "Real results from real farmers across Maharashtra",
+    "subtitleLocal": "महाराष्ट्रातील शेतकऱ्यांचे अनुभव"
+  },
+  "products": {
+    "title": "Explore Products",
+    "subtitle": "Our Range",
+    "search": "Search products...",
+    "enquire": "Enquire Now",
+    "bestseller": "Bestseller",
+    "highYield": "High Yield",
+    "allProducts": "All Products"
+  },
+  "about": {
+    "label": "About Agri-Gen Innovation",
+    "title": "Transforming Agriculture through Innovation",
+    "hq": "Headquartered in Nashik",
+    "hqLocal": "नाशिकमध्ये मुख्यालय",
+    "established": "Established in 2026",
+    "science": "Science-Based Innovation",
+    "commitment": "Our Commitment",
+    "commitmentDesc": "To deliver verified, effective, and result-oriented solutions that help farmers maximize crop productivity and ensure better crop protection across the globe."
+  },
+  "mission": {
+    "sectionTitle": "Our Purpose",
+    "pageTitle": "Advancing Agriculture for a Better Tomorrow",
+    "missionTitle": "Our Mission",
+    "missionText": "To drive next-generation agriculture through advanced agri-tech solutions, delivering innovative and high-quality products that address real field challenges. We are committed to ethical business practices, continuous research, and farmer-focused services.",
+    "visionTitle": "Our Vision",
+    "visionText": "To transform nature's intelligence into sustainable and resilient agriculture through science-driven innovation. We empower farmers with advanced solutions that enhance productivity, restore ecosystems, and ensure long-term soil health.",
+    "drivingGrowth": "Driving Sustainable Growth",
+    "drivingGrowthDesc": "We believe in transforming complex science into simple, effective field solutions. Our commitment to farmers is unwavering, as we aim to pave the way for a more food-secure and greener future."
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Connect with our experts for bulk inquiries, distribution partnerships, or technical product support.",
+    "titleLocal": "संपर्क साधा",
+    "hq": "Corporate Headquarters",
+    "address": "GAT No.306, Old Janori Road, Near Hanuman Mandir, Jaulke, Tal. Dindori, Dist. Nashik 422207, Maharashtra, India",
+    "addressLocal": "गट नं. ३०६, जुनी जानोरी रोड, हनुमान मंदिराजवळ, जौळके, ता. दिंडोरी, जि. नाशिक ४२२२०७",
+    "email": "Email Inquiry",
+    "phone": "Contact Numbers",
+    "whatsapp": "WhatsApp Us",
+    "formName": "Full Name",
+    "formPhone": "Phone Number",
+    "formMessage": "Your Message",
+    "formInquiry": "Inquiry Type",
+    "formSubmit": "Send Inquiry",
+    "advisoryService": "Agricultural Advisory Service",
+    "advisoryServiceLocal": "कृषी सल्लागार सेवा"
+  },
+  "footer": {
+    "tagline": "Trusted Organic Agri-Inputs from Nashik, Maharashtra",
+    "taglineLocal": "नाशिक, महाराष्ट्रातून विश्वसनीय सेंद्रिय कृषी-उत्पादने",
+    "callUs": "Call Us",
+    "visitUs": "Visit Us",
+    "quickLinks": "Quick Links",
+    "copyright": "© {year} Agri-Gen Innovation. Nashik 422207."
+  },
+  "language": {
+    "en": "English",
+    "hi": "हिंदी",
+    "mr": "मराठी"
+  },
+  "tts": {
+    "listen": "Listen",
+    "stop": "Stop"
+  }
+}

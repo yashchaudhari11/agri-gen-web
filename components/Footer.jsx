@@ -1,63 +1,141 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('footer');
+  const tNav = useTranslations('nav');
+  const locale = useLocale();
+  const prefix = locale === 'en' ? '' : `/${locale}`;
+
   return (
-    <footer className="w-full rounded-t-[50px] sm:rounded-t-[80px] lg:rounded-t-[120px] mt-16 sm:mt-20 bg-slate-900 overflow-hidden">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
-        <div>
-          <div className="text-2xl font-black text-white mb-4 font-headline uppercase">Agri-Gen</div>
-          <p className="text-slate-400 text-sm leading-relaxed mb-8">
-            Pioneering the future of organic agriculture through precision biotechnology and industrial excellence.
-          </p>
+    <footer className="w-full rounded-t-[40px] sm:rounded-t-[60px] lg:rounded-t-[80px] mt-8 sm:mt-12 bg-earth-brown overflow-hidden" id="footer">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 sm:gap-12">
+          {/* Column 1: Brand + Tagline */}
+          <div>
+            <div className="text-2xl sm:text-3xl font-black text-white mb-3 font-headline uppercase">
+              Agri-Gen Innovation
+            </div>
+            <p className="text-white/60 text-sm leading-relaxed mb-2">
+              {t('tagline')}
+            </p>
+            <p className="font-devanagari text-harvest-gold text-sm mb-6">
+              {t('taglineLocal')}
+            </p>
 
-          <div className="flex gap-4">
-            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary transition-colors cursor-pointer">
-              <span className="material-symbols-outlined text-xl">share</span>
+            {/* Large Address — Local Shop Sign style */}
+            <div className="bg-white/5 rounded-2xl p-5 mb-6 border border-white/10">
+              <div className="flex gap-3 items-start mb-3">
+                <span className="material-symbols-outlined text-harvest-gold text-2xl flex-shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  location_on
+                </span>
+                <div>
+                  <p className="text-white font-bold text-sm sm:text-base leading-relaxed">
+                    GAT No.306, Old Janori Road,<br />
+                    Near Hanuman Mandir, Jaulke,<br />
+                    Tal. Dindori, Dist. Nashik 422207
+                  </p>
+                  <p className="font-devanagari text-white/50 text-xs mt-1">
+                    ता. दिंडोरी, जि. नाशिक ४२२२०७
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary transition-colors cursor-pointer">
-              <span className="material-symbols-outlined text-xl">public</span>
+          </div>
+
+          {/* Column 2: Phone Numbers & WhatsApp — Large, Prominent */}
+          <div>
+            <h4 className="text-harvest-gold font-bold mb-6 uppercase tracking-widest text-xs">
+              📞 {t('callUs')}
+            </h4>
+            <div className="space-y-4">
+              <a
+                href="tel:+919876543210"
+                className="flex items-center gap-3 text-white hover:text-harvest-gold transition-colors group"
+              >
+                <span className="material-symbols-outlined text-2xl text-harvest-gold group-hover:scale-110 transition-transform" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  call
+                </span>
+                <span className="text-xl sm:text-2xl font-black tracking-wide">
+                  +91 98765 43210
+                </span>
+              </a>
+              <a
+                href="tel:+912532304500"
+                className="flex items-center gap-3 text-white hover:text-harvest-gold transition-colors group"
+              >
+                <span className="material-symbols-outlined text-2xl text-harvest-gold group-hover:scale-110 transition-transform" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  call
+                </span>
+                <span className="text-xl sm:text-2xl font-black tracking-wide">
+                  +91 253 230 4500
+                </span>
+              </a>
+
+              {/* WhatsApp */}
+              <a
+                href="https://wa.me/919876543210"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 flex items-center gap-3 bg-whatsapp/20 text-whatsapp px-5 py-3.5 rounded-2xl hover:bg-whatsapp/30 transition-all group border border-whatsapp/20"
+              >
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+                <span className="text-lg font-bold">WhatsApp</span>
+              </a>
             </div>
-            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-primary transition-colors cursor-pointer">
-              <span className="material-symbols-outlined text-xl">groups</span>
+          </div>
+
+          {/* Column 3: Quick Links */}
+          <div>
+            <h4 className="text-harvest-gold font-bold mb-6 uppercase tracking-widest text-xs">
+              🔗 {t('quickLinks')}
+            </h4>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  className="text-white/70 hover:text-white transition-colors inline-block text-sm sm:text-base font-medium"
+                  href={`${prefix}/`}
+                >
+                  {tNav('home')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="text-white/70 hover:text-white transition-colors inline-block text-sm sm:text-base font-medium"
+                  href={`${prefix}/about`}
+                >
+                  {tNav('about')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="text-white/70 hover:text-white transition-colors inline-block text-sm sm:text-base font-medium"
+                  href={`${prefix}/products`}
+                >
+                  {tNav('products')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="text-white/70 hover:text-white transition-colors inline-block text-sm sm:text-base font-medium"
+                  href={`${prefix}/contact`}
+                >
+                  {tNav('contact')}
+                </Link>
+              </li>
+            </ul>
+
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <p className="text-white/40 text-xs font-medium">
+                {t('copyright', { year: new Date().getFullYear() })}
+              </p>
             </div>
           </div>
         </div>
-
-        <div>
-          <h4 className="text-lime-400 font-semibold mb-6 sm:mb-8 uppercase tracking-widest text-xs">Quick Links</h4>
-          <ul className="space-y-4">
-            <li><Link className="text-slate-400 hover:text-white transition-colors inline-block text-sm" href="/">Home</Link></li>
-            <li><Link className="text-slate-400 hover:text-white transition-colors inline-block text-sm" href="/about">About Us</Link></li>
-            <li><Link className="text-slate-400 hover:text-white transition-colors inline-block text-sm" href="/products">Products</Link></li>
-            <li><Link className="text-slate-400 hover:text-white transition-colors inline-block text-sm" href="/contact">Partner Network</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-lime-400 font-semibold mb-6 sm:mb-8 uppercase tracking-widest text-xs">Legal</h4>
-          <ul className="space-y-4">
-            <li><Link className="text-slate-400 hover:text-white transition-colors inline-block text-sm" href="#">Privacy Policy</Link></li>
-            <li><Link className="text-slate-400 hover:text-white transition-colors inline-block text-sm" href="#">Terms of Service</Link></li>
-            <li><Link className="text-slate-400 hover:text-white transition-colors inline-block text-sm" href="#">Quality Certifications</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-lime-400 font-semibold mb-6 sm:mb-8 uppercase tracking-widest text-xs">Newsletter</h4>
-          <p className="text-slate-400 text-xs mb-6">Stay updated with our latest organic innovations.</p>
-          <div className="flex gap-2">
-            <input className="bg-white/5 border-none rounded-lg p-3 text-white text-sm w-full focus:ring-1 focus:ring-primary" placeholder="Email" type="email" />
-            <button className="bg-primary text-white p-3 rounded-lg hover:bg-primary-container transition-all">
-              <span className="material-symbols-outlined">send</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-white/5 text-center px-4">
-        <p className="text-slate-500 text-xs">
-          © {new Date().getFullYear()} Agri-Gen Innovation. Precision in Nature. GAT No.306, Nashik 422207.
-        </p>
       </div>
     </footer>
   );

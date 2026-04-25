@@ -1,80 +1,144 @@
+'use client';
+
 import React from 'react';
+import { useTranslations } from 'next-intl';
+import TextToSpeech from './TextToSpeech';
 
 const MissionAndVision = () => {
+  const t = useTranslations('mission');
+
   return (
-    <section id="mission-vision" className="relative py-24 sm:py-8 overflow-hidden bg-white">
-      {/* Background Decorative Elements */}
+    <section
+      id="mission-vision"
+      className="relative py-16 sm:py-20 lg:py-24 overflow-hidden bg-warm-white"
+    >
+      {/* Background Decorative */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] opacity-10 bg-primary rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] opacity-10 bg-secondary rounded-full blur-[120px]"></div>
+        <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] opacity-10 bg-kisan-green rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] opacity-10 bg-harvest-gold rounded-full blur-[120px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-20 animate-fade-in">
-          <h2 className="text-sm font-bold tracking-[0.2em] text-primary uppercase mb-4">Our Purpose</h2>
-          <h1 className="font-headline text-5xl sm:text-6xl font-black text-on-surface leading-tight">
-            Advancing Agriculture for a <span className="text-primary italic">Better Tomorrow</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-14 sm:mb-20 animate-fade-in">
+          <span className="inline-block px-4 py-1.5 mb-4 text-xs font-bold tracking-widest uppercase bg-kisan-green/10 text-kisan-green rounded-full border border-kisan-green/20">
+            🎯 {t('sectionTitle')}
+          </span>
+          <h1 className="font-headline text-4xl sm:text-5xl lg:text-6xl font-extrabold text-pure-black leading-tight">
+            {t('pageTitle').split('Better')[0]}
+            <span className="text-gradient-kisan italic">Better Tomorrow</span>
           </h1>
-          <div className="w-24 h-1.5 bg-primary mx-auto mt-8 rounded-full"></div>
+          <div className="w-24 h-1.5 bg-kisan-green mx-auto mt-8 rounded-full" />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-stretch">
+        {/* Mission & Vision Cards */}
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
           {/* Mission Card */}
-          <div className="group relative flex flex-col p-8 sm:p-14 rounded-[48px] bg-white border border-gray-100 shadow-xl hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 transition-all duration-500 hover:translate-y-[-8px]">
-            <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
-              <span className="material-symbols-outlined text-[140px] text-primary">rocket_launch</span>
+          <div className="group relative flex flex-col p-8 sm:p-12 rounded-kisan-xl bg-white border-2 border-kisan-green/10 shadow-warm hover:shadow-kisan-lg hover:border-kisan-green/30 transition-all duration-500 hover:translate-y-[-6px]">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity">
+              <span className="material-symbols-outlined text-[120px] text-kisan-green">
+                rocket_launch
+              </span>
             </div>
-            
-            <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center text-primary mb-10 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
-              <span className="material-symbols-outlined text-4xl">rocket_launch</span>
+
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-kisan-green/10 rounded-kisan flex items-center justify-center text-kisan-green mb-8 group-hover:bg-kisan-green group-hover:text-white transition-all duration-500 shadow-sm">
+              <span
+                className="material-symbols-outlined text-3xl sm:text-4xl"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                rocket_launch
+              </span>
             </div>
-            
-            <h3 className="font-display font-black text-4xl text-gray-900 mb-6">Our Mission</h3>
-            <p className="text-gray-500 text-lg leading-relaxed mb-10 flex-grow">
-              To drive next-generation agriculture through advanced agri-tech solutions, delivering innovative and high-quality products that address real field challenges. We are committed to ethical business practices, continuous research, and farmer-focused services.
+
+            <div className="flex items-center gap-3 mb-4">
+              <h3 className="font-headline font-extrabold text-2xl sm:text-3xl text-pure-black">
+                {t('missionTitle')}
+              </h3>
+              <TextToSpeech text={t('missionText')} />
+            </div>
+
+            <p className="text-text-secondary text-base sm:text-lg leading-relaxed mb-8 flex-grow">
+              {t('missionText')}
             </p>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {['Advanced Tech', 'Ethical Growth', 'Farmer First'].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 bg-slate-50 px-4 py-3 rounded-2xl border border-slate-100">
-                  <span className="w-2 h-2 rounded-full bg-primary" />
-                  <span className="font-bold text-gray-700 text-sm">{item}</span>
-                </div>
-              ))}
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {['Advanced Tech', 'Ethical Growth', 'Farmer First'].map(
+                (item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2 bg-cream px-4 py-3 rounded-2xl border border-kisan-green/10"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-kisan-green" />
+                    <span className="font-bold text-text-primary text-xs sm:text-sm">
+                      {item}
+                    </span>
+                  </div>
+                )
+              )}
             </div>
           </div>
 
           {/* Vision Card */}
-          <div className="group relative flex flex-col p-8 sm:p-14 rounded-[48px] bg-white border border-gray-100 shadow-xl hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 transition-all duration-500 hover:translate-y-[-8px]">
-            <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
-              <span className="material-symbols-outlined text-[140px] text-primary">visibility</span>
+          <div className="group relative flex flex-col p-8 sm:p-12 rounded-kisan-xl bg-white border-2 border-kisan-green/10 shadow-warm hover:shadow-kisan-lg hover:border-kisan-green/30 transition-all duration-500 hover:translate-y-[-6px]">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity">
+              <span className="material-symbols-outlined text-[120px] text-kisan-green">
+                visibility
+              </span>
             </div>
 
-            <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center text-primary mb-10 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
-              <span className="material-symbols-outlined text-4xl">visibility</span>
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-harvest-gold/10 rounded-kisan flex items-center justify-center text-harvest-gold-dark mb-8 group-hover:bg-harvest-gold group-hover:text-earth-brown transition-all duration-500 shadow-sm">
+              <span
+                className="material-symbols-outlined text-3xl sm:text-4xl"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                visibility
+              </span>
             </div>
-            
-            <h3 className="font-display font-black text-4xl text-gray-900 mb-6">Our Vision</h3>
-            <p className="text-gray-500 text-lg leading-relaxed mb-10 flex-grow">
-              To transform nature’s intelligence into sustainable and resilient agriculture through science-driven innovation. We empower farmers with advanced solutions that enhance productivity, restore ecosystems, and ensure long-term soil health.
+
+            <div className="flex items-center gap-3 mb-4">
+              <h3 className="font-headline font-extrabold text-2xl sm:text-3xl text-pure-black">
+                {t('visionTitle')}
+              </h3>
+              <TextToSpeech text={t('visionText')} />
+            </div>
+
+            <p className="text-text-secondary text-base sm:text-lg leading-relaxed mb-8 flex-grow">
+              {t('visionText')}
             </p>
 
-            <div className="p-6 rounded-[32px] bg-ag-green/5 border border-ag-green/10">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="material-symbols-outlined text-primary text-xl">eco</span>
-                <span className="text-xs font-bold uppercase tracking-widest text-primary">Future Impact</span>
+            <div className="p-5 rounded-kisan bg-kisan-green/5 border border-kisan-green/10">
+              <div className="flex items-center gap-2 mb-2">
+                <span
+                  className="material-symbols-outlined text-kisan-green text-xl"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  eco
+                </span>
+                <span className="text-xs font-bold uppercase tracking-widest text-kisan-green">
+                  Future Impact
+                </span>
               </div>
-              <p className="text-gray-700 font-medium">Restoring ecosystems and ensuring agricultural resilience for generations.</p>
+              <p className="text-text-secondary font-medium text-sm">
+                Restoring ecosystems and ensuring agricultural resilience for
+                generations.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Core Values / Conclusion */}
-        <div className="mt-24 text-center max-w-4xl mx-auto bg-primary-container/20 p-12 rounded-[60px] border border-primary/10">
-          <span className="material-symbols-outlined text-primary text-5xl mb-6">psychology</span>
-          <h4 className="font-headline text-2xl font-bold text-on-surface mb-4">Driving Sustainable Growth</h4>
-          <p className="text-on-surface-variant text-lg">
-            We believe in transforming complex science into simple, effective field solutions. Our commitment to farmers is unwavering, as we aim to pave the way for a more food-secure and greener future.
+        {/* Driving Growth Box */}
+        <div className="mt-16 sm:mt-20 text-center max-w-4xl mx-auto bg-kisan-green/5 p-8 sm:p-12 rounded-kisan-xl border-2 border-kisan-green/10">
+          <span
+            className="material-symbols-outlined text-kisan-green text-5xl mb-6"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
+            psychology
+          </span>
+          <h4 className="font-headline text-xl sm:text-2xl font-bold text-pure-black mb-3">
+            {t('drivingGrowth')}
+          </h4>
+          <p className="text-text-secondary text-base sm:text-lg">
+            {t('drivingGrowthDesc')}
           </p>
         </div>
       </div>
