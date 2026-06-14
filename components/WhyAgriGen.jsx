@@ -59,25 +59,28 @@ const comparisons = [
   },
 ];
 
-function ScoreBar({ score, color }) {
+function ProgressBar({ score, color, bgColor }) {
+  const pct = (score / 5) * 100;
   return (
-    <div className="flex gap-1 mt-2">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div
-          key={i}
-          className={`h-2 w-6 sm:w-8 rounded-full transition-all duration-500 ${
-            i <= score ? color : 'bg-gray-200'
-          }`}
-        />
-      ))}
+    <div className={`h-2.5 w-full rounded-full ${bgColor} overflow-hidden mt-3`}>
+      <div
+        className={`h-full rounded-full ${color} transition-all duration-700`}
+        style={{ width: `${pct}%` }}
+      />
     </div>
   );
 }
 
 export default function WhyAgriGen() {
   return (
-    <section className="py-16 sm:py-20 lg:py-28 bg-warm-white overflow-hidden" id="why-agrigen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 sm:py-20 lg:py-28 bg-warm-white overflow-hidden relative" id="why-agrigen">
+      {/* Organic background pattern */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.025]" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='35' fill='none' stroke='%232D6A4F' stroke-width='1'/%3E%3Ccircle cx='40' cy='40' r='20' fill='none' stroke='%232D6A4F' stroke-width='1'/%3E%3Ccircle cx='40' cy='40' r='5' fill='none' stroke='%232D6A4F' stroke-width='1'/%3E%3C/svg%3E")`,
+        backgroundSize: '80px 80px',
+      }} />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <ScrollReveal>
           <div className="text-center mb-12 sm:mb-16">
@@ -96,91 +99,129 @@ export default function WhyAgriGen() {
           </div>
         </ScrollReveal>
 
-        {/* Column Headers */}
-        <ScrollReveal delay={0.1}>
-          <div className="hidden sm:grid sm:grid-cols-[1.2fr_1fr_1fr] gap-4 mb-6 sticky top-20 z-20 bg-warm-white/95 backdrop-blur-md py-3 px-4 rounded-2xl border border-kisan-green/5">
-            <div className="text-xs font-bold uppercase tracking-widest text-text-muted">
-              Comparison Factor
+        {/* Split Header Labels */}
+        <ScrollReveal delay={0.05}>
+          <div className="grid grid-cols-[auto_1fr_1fr] gap-3 sm:gap-4 mb-4 px-2">
+            <div className="w-12 sm:w-16" /> {/* spacer for icon column */}
+            <div className="rounded-2xl overflow-hidden">
+              <div className="bg-red-600 text-white text-center py-3 px-4">
+                <span className="text-lg sm:text-xl font-black tracking-tight flex items-center justify-center gap-2">
+                  <span className="text-xl">⚠️</span> Traditional Chemicals
+                </span>
+                <p className="text-red-200 text-xs mt-0.5 font-medium">रासायनिक खते</p>
+              </div>
             </div>
-            <div className="text-center">
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-50 text-red-700 text-xs font-bold border border-red-200">
-                ⚠️ Traditional Chemicals
-              </span>
-            </div>
-            <div className="text-center">
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-kisan-green/10 text-kisan-green text-xs font-bold border border-kisan-green/20">
-                ✅ Agri-Gen Organic
-              </span>
+            <div className="rounded-2xl overflow-hidden">
+              <div className="bg-kisan-green text-white text-center py-3 px-4">
+                <span className="text-lg sm:text-xl font-black tracking-tight flex items-center justify-center gap-2">
+                  <span className="text-xl">✅</span> Agri-Gen Organic
+                </span>
+                <p className="text-green-200 text-xs mt-0.5 font-medium">सेंद्रिय उत्पादने</p>
+              </div>
             </div>
           </div>
         </ScrollReveal>
 
         {/* Comparison Rows */}
-        <StaggerContainer className="flex flex-col gap-3 sm:gap-4" staggerDelay={0.08}>
+        <StaggerContainer className="flex flex-col gap-3" staggerDelay={0.08}>
           {comparisons.map((item) => (
             <StaggerItem key={item.aspect}>
-              <div className="group grid grid-cols-1 sm:grid-cols-[1.2fr_1fr_1fr] gap-3 sm:gap-4 bg-white rounded-kisan p-5 sm:p-6 border-2 border-kisan-green/5 hover:border-kisan-green/20 hover:shadow-kisan transition-all duration-300 relative">
-                {/* Z-axis depth effect */}
-                <div className="absolute inset-0 rounded-kisan shadow-[0_8px_32px_rgba(45,106,79,0.06)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="group grid grid-cols-[auto_1fr_1fr] gap-3 sm:gap-4 rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.01]">
 
-                {/* Factor Name */}
-                <div className="flex items-center gap-3 sm:gap-4 relative z-10">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-kisan-green/10 flex items-center justify-center text-kisan-green group-hover:bg-kisan-green group-hover:text-white transition-all duration-300">
+                {/* Icon Column */}
+                <div className="w-12 sm:w-16 flex items-stretch">
+                  <div className="flex-1 bg-white rounded-xl flex flex-col items-center justify-center gap-1.5 border-2 border-kisan-green/10 group-hover:border-kisan-green/30 transition-colors p-2">
                     <span
-                      className="material-symbols-outlined text-xl"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
+                      className="material-symbols-outlined text-kisan-green text-2xl sm:text-3xl"
+                      style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
                     >
                       {item.icon}
                     </span>
-                  </div>
-                  <div>
-                    <h4 className="font-headline font-bold text-sm sm:text-base text-pure-black">
+                    <p className="text-[8px] sm:text-[9px] font-bold text-text-muted uppercase tracking-wider text-center leading-tight">
                       {item.aspect}
-                    </h4>
-                    <p className="font-devanagari text-kisan-green text-xs">
+                    </p>
+                    <p className="font-devanagari text-kisan-green text-[8px] text-center leading-tight hidden sm:block">
                       {item.aspectLocal}
                     </p>
                   </div>
                 </div>
 
-                {/* Traditional */}
-                <div className="bg-red-50/50 rounded-xl p-4 border border-red-100/50 relative z-10">
-                  <span className="sm:hidden text-[10px] font-bold uppercase tracking-widest text-red-400 mb-1 block">
-                    ⚠️ Traditional
-                  </span>
-                  <p className="text-text-secondary text-xs sm:text-sm leading-relaxed">
-                    {item.traditional}
-                  </p>
-                  <ScoreBar score={item.traditionalScore} color="bg-red-400" />
+                {/* Traditional Side — Red tint */}
+                <div className="bg-red-50 border-2 border-red-100 rounded-xl p-4 sm:p-5 relative overflow-hidden">
+                  {/* Subtle red watermark */}
+                  <div className="absolute top-2 right-2 text-red-200 text-4xl font-black opacity-20 select-none">✗</div>
+                  <div className="flex items-start gap-2 mb-2 relative z-10">
+                    <span className="text-red-500 text-base flex-shrink-0 mt-0.5">❌</span>
+                    <p className="text-red-800 text-xs sm:text-sm leading-relaxed font-medium">
+                      {item.traditional}
+                    </p>
+                  </div>
+                  <ProgressBar score={item.traditionalScore} color="bg-red-500" bgColor="bg-red-100" />
+                  <div className="flex justify-between mt-1">
+                    <span className="text-red-400 text-[9px] font-bold uppercase tracking-wider">Score</span>
+                    <span className="text-red-600 text-[9px] font-black">{item.traditionalScore}/5</span>
+                  </div>
                 </div>
 
-                {/* Organic */}
-                <div className="bg-kisan-green/5 rounded-xl p-4 border border-kisan-green/10 relative z-10">
-                  <span className="sm:hidden text-[10px] font-bold uppercase tracking-widest text-kisan-green mb-1 block">
-                    ✅ Agri-Gen Organic
-                  </span>
-                  <p className="text-text-primary text-xs sm:text-sm leading-relaxed font-medium">
-                    {item.organic}
-                  </p>
-                  <ScoreBar score={item.organicScore} color="bg-kisan-green" />
+                {/* Agri-Gen Organic Side — Green tint */}
+                <div className="bg-kisan-green/5 border-2 border-kisan-green/15 rounded-xl p-4 sm:p-5 relative overflow-hidden group-hover:border-kisan-green/30 transition-colors">
+                  {/* Subtle green watermark */}
+                  <div className="absolute top-2 right-2 text-kisan-green text-4xl font-black opacity-10 select-none">✓</div>
+                  <div className="flex items-start gap-2 mb-2 relative z-10">
+                    <span className="text-kisan-green text-base flex-shrink-0 mt-0.5">✅</span>
+                    <p className="text-kisan-green-dark text-xs sm:text-sm leading-relaxed font-medium">
+                      {item.organic}
+                    </p>
+                  </div>
+                  <ProgressBar score={item.organicScore} color="bg-kisan-green" bgColor="bg-kisan-green/10" />
+                  <div className="flex justify-between mt-1">
+                    <span className="text-kisan-green/60 text-[9px] font-bold uppercase tracking-wider">Score</span>
+                    <span className="text-kisan-green text-[9px] font-black">{item.organicScore}/5</span>
+                  </div>
                 </div>
+
               </div>
             </StaggerItem>
           ))}
         </StaggerContainer>
 
+        {/* Mobile legend */}
+        <div className="sm:hidden flex gap-4 mt-4 justify-center text-xs font-bold">
+          <span className="flex items-center gap-1 text-red-600"><span>⚠️</span> Traditional</span>
+          <span className="flex items-center gap-1 text-kisan-green"><span>✅</span> Agri-Gen Organic</span>
+        </div>
+
         {/* Bottom verdict */}
         <ScrollReveal delay={0.2}>
           <div className="mt-10 sm:mt-14 bg-gradient-to-r from-kisan-green to-kisan-green-light rounded-kisan-xl p-6 sm:p-10 text-white text-center relative overflow-hidden">
             <div className="absolute top-0 right-0 w-60 h-60 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-harvest-gold/10 rounded-full -ml-10 -mb-10 blur-2xl" />
             <div className="relative z-10">
-              <p className="text-3xl sm:text-4xl font-black mb-2">92%</p>
-              <p className="text-white/90 text-sm sm:text-base font-medium max-w-xl mx-auto">
+              {/* Big stat */}
+              <p className="text-5xl sm:text-6xl font-black mb-2 text-harvest-gold">92%</p>
+              <p className="text-white/90 text-sm sm:text-base font-medium max-w-xl mx-auto mb-3">
                 of farmers who switched to Agri-Gen organic inputs reported better soil health and equal or higher yields within 2 seasons
               </p>
-              <p className="font-devanagari text-harvest-gold text-sm mt-3">
+              <p className="font-devanagari text-harvest-gold text-sm">
                 ९२% शेतकऱ्यांनी सेंद्रिय उत्पादनांतून चांगले परिणाम नोंदवले
               </p>
+
+              {/* Mini metrics row */}
+              <div className="mt-8 grid grid-cols-3 gap-4 max-w-lg mx-auto">
+                {[
+                  { label: 'Soil Health Improvement', pct: 88 },
+                  { label: 'Yield Consistency', pct: 76 },
+                  { label: 'Cost Reduction', pct: 65 },
+                ].map((m) => (
+                  <div key={m.label} className="text-center">
+                    <div className="text-lg sm:text-2xl font-black text-white mb-1">{m.pct}%</div>
+                    <div className="h-1.5 w-full rounded-full bg-white/20 mb-1 overflow-hidden">
+                      <div className="h-full rounded-full bg-harvest-gold transition-all" style={{ width: `${m.pct}%` }} />
+                    </div>
+                    <p className="text-white/60 text-[9px] font-semibold uppercase tracking-wider leading-tight">{m.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </ScrollReveal>
