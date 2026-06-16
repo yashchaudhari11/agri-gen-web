@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import FarmerStories from './FarmerStories';
@@ -11,142 +11,366 @@ import NashikPride from './NashikPride';
 import CertificationRibbon from './CertificationRibbon';
 import ScrollReveal from './ScrollReveal';
 
+const HERO_SLIDES = [
+  {
+    id: 0,
+    image: '/images/hero_slide_1.png',
+    objectPos: 'center center',
+    badge: '🌱 100% Certified Organic',
+    tagline: 'Enriching Every Seed,',
+    headline: 'Every Soil, Every Season',
+    headlineMr: 'प्रत्येक बीज, प्रत्येक जमीन',
+    subtext: 'Science-backed organic inputs trusted by 1200+ farmers across Maharashtra.',
+    cta1Label: 'Enquire Now',
+    cta1Icon: '📞',
+    cta2Label: 'Explore Products',
+    cta2Icon: '🌿',
+    accentColor: '#2D6A4F',
+  },
+  {
+    id: 1,
+    image: '/images/hero_slide_2.png',
+    objectPos: 'center 40%',
+    badge: '🏆 ISO 9001:2015 Certified',
+    tagline: 'Maximising Yield Through',
+    headline: 'Ingenious Organic Chemistry',
+    headlineMr: 'उत्पन्न वाढवा, निसर्ग जपा',
+    subtext: 'From soil health to crop protection — 500+ product SKUs engineered for Maharashtra\'s fields.',
+    cta1Label: 'View Products',
+    cta1Icon: '🛒',
+    cta2Label: 'Learn More',
+    cta2Icon: '📖',
+    accentColor: '#E09F00',
+  },
+  {
+    id: 2,
+    image: '/images/hero_slide_3.png',
+    objectPos: 'center 30%',
+    badge: '🤝 Farmer-First Philosophy',
+    tagline: 'Empowering the Heart of India —',
+    headline: 'The Indian Farmer',
+    headlineMr: 'भारतीय शेतकरी — आमचा अभिमान',
+    subtext: 'Agri-Gen Innovation stands beside every farmer — from planting to harvest, season after season.',
+    cta1Label: 'Our Story',
+    cta1Icon: '🌾',
+    cta2Label: 'Contact Us',
+    cta2Icon: '📞',
+    accentColor: '#2D6A4F',
+  },
+  {
+    id: 3,
+    image: '/images/hero_slide_4.png',
+    objectPos: 'center center',
+    badge: '🔬 Science Meets Nature',
+    tagline: 'Leading to a',
+    headline: 'Sustainable Green Future',
+    headlineMr: 'शाश्वत हरित भविष्याकडे',
+    subtext: 'Zero harmful residues. Carbon-conscious manufacturing. Biodiversity protection — for generations.',
+    cta1Label: 'Our Mission',
+    cta1Icon: '🎯',
+    cta2Label: 'Get in Touch',
+    cta2Icon: '📞',
+    accentColor: '#40916C',
+  },
+];
+
+const SLIDE_DURATION = 6000;
+
 export default function NewHomeContent() {
   const t = useTranslations();
   const locale = useLocale();
   const prefix = locale === 'en' ? '' : `/${locale}`;
 
+  // ===== Hero Slider State =====
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [prevSlide, setPrevSlide] = useState(null);
+  const [textVisible, setTextVisible] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(null);
+  const timerRef = useRef(null);
+  const progressStart = useRef(null);
+
+  const goToSlide = useCallback((idx) => {
+    if (idx === activeSlide) return;
+    setTextVisible(false);
+    setPrevSlide(activeSlide);
+    setTimeout(() => {
+      setActiveSlide(idx);
+      setProgress(0);
+      progressStart.current = performance.now();
+      setTimeout(() => setTextVisible(true), 120);
+    }, 600);
+  }, [activeSlide]);
+
+  const nextSlide = useCallback(() => {
+    goToSlide((activeSlide + 1) % HERO_SLIDES.length);
+  }, [activeSlide, goToSlide]);
+
+  const prevSlideBtn = useCallback(() => {
+    goToSlide((activeSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+  }, [activeSlide, goToSlide]);
+
+  // Auto-advance + progress bar
+  useEffect(() => {
+    setProgress(0);
+    progressStart.current = performance.now();
+
+    const animate = (now) => {
+      const elapsed = now - (progressStart.current || now);
+      const pct = Math.min((elapsed / SLIDE_DURATION) * 100, 100);
+      setProgress(pct);
+      if (pct < 100) {
+        progressRef.current = requestAnimationFrame(animate);
+      }
+    };
+    progressRef.current = requestAnimationFrame(animate);
+
+    timerRef.current = setTimeout(() => nextSlide(), SLIDE_DURATION);
+
+    return () => {
+      cancelAnimationFrame(progressRef.current);
+      clearTimeout(timerRef.current);
+    };
+  }, [activeSlide, nextSlide]);
+
+  const slide = HERO_SLIDES[activeSlide];
+
   return (
     <div className="bg-warm-white font-body text-text-primary">
 
-      {/* ===== HERO SECTION — FULL-BLEED IMMERSIVE ===== */}
-      <section
-        className="relative min-h-screen flex items-center overflow-hidden"
-        id="home"
-      >
-        {/* Full-bleed background image — panoramic crop rows at golden sunset */}
+      {/* ===== HERO SLIDER — FULL-VIEWPORT PROFESSIONAL ===== */}
+      <section className="relative h-screen min-h-[600px] max-h-[1000px] overflow-hidden" id="home">
+
+        {/* ── Background Images (cross-fade stack) ── */}
         <div className="absolute inset-0 z-0">
-          <img
-            src="/images/hero_field_sunrise.png"
-            alt="Lush Indian agricultural crop rows stretching toward a dramatic golden sunset"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: 'center 30%' }}
-          />
-          {/* Layer 1: Left-to-right gradient — keeps left text area dark & readable */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-kisan-green-dark/55 to-black/20" />
-          {/* Layer 2: Top vignette — tames the bright sunset sky */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
-          {/* Layer 3: Bottom fade into page */}
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-warm-white/30 to-transparent" />
+          {HERO_SLIDES.map((s, i) => (
+            <div
+              key={s.id}
+              className="absolute inset-0 transition-opacity"
+              style={{
+                opacity: i === activeSlide ? 1 : 0,
+                transitionDuration: '800ms',
+                transitionTimingFunction: 'ease-in-out',
+                zIndex: i === activeSlide ? 2 : i === prevSlide ? 1 : 0,
+              }}
+            >
+              <img
+                src={s.image}
+                alt={s.headline}
+                className="w-full h-full object-cover"
+                style={{ objectPosition: s.objectPos }}
+              />
+            </div>
+          ))}
+          {/* Permanent gradient overlays */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/75 via-black/40 to-black/20" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
         </div>
 
-        {/* Organic leaf pattern overlay */}
-        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none leaf-overlay-pattern" />
+        {/* ── Slide Content ── */}
+        <div className="relative z-20 h-full flex items-center">
+          <div className="max-w-7xl mx-auto w-full px-6 sm:px-10 lg:px-16">
+            <div className="max-w-3xl">
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10 py-28 sm:py-32">
-          {/* Left Content */}
-          <ScrollReveal variant="fadeLeft" duration={0.8}>
-            <div className="text-center md:text-left">
-              <span className="inline-block px-4 py-2 mb-6 text-xs font-bold tracking-widest uppercase bg-white/15 text-white rounded-full border border-white/30 backdrop-blur-sm">
-                🌾 {t('hero.badge')}
-              </span>
-
-              <h1 className="font-headline text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-4 drop-shadow-lg">
-                {t('hero.title')} <br />
-                <span className="text-harvest-gold italic drop-shadow-sm">
-                  {t('hero.titleHighlight')}
+              {/* Badge pill */}
+              <div
+                className="transition-all duration-500"
+                style={{
+                  opacity: textVisible ? 1 : 0,
+                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
+                  transitionDelay: '0ms',
+                }}
+              >
+                <span className="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest uppercase bg-white/15 text-white rounded-full border border-white/30 backdrop-blur-sm">
+                  {slide.badge}
                 </span>
-              </h1>
-
-              {/* Bilingual subtitle */}
-              <p className="font-devanagari text-white/90 text-lg sm:text-xl mb-6 font-medium drop-shadow-sm">
-                {t('hero.subtitle')}
-              </p>
-
-              {/* ISO Badge */}
-              <div className="flex items-center gap-3 mb-8 justify-center md:justify-start">
-                <div className="iso-seal iso-seal-light">
-                  <span>ISO<br/>9001<br/>2015</span>
-                </div>
-                <div>
-                  <span className="bg-harvest-gold text-earth-brown text-xs font-extrabold px-4 py-1.5 rounded-full shadow-lg">
-                    ✅ {t('hero.isoCertified')}
-                  </span>
-                </div>
               </div>
 
-              <p className="text-base sm:text-lg text-white/80 leading-relaxed mb-8 sm:mb-10 max-w-xl mx-auto md:mx-0 drop-shadow-sm">
-                {t('hero.description')}
-              </p>
+              {/* Tagline (light weight) */}
+              <div
+                className="transition-all duration-500"
+                style={{
+                  opacity: textVisible ? 1 : 0,
+                  transform: textVisible ? 'translateY(0)' : 'translateY(28px)',
+                  transitionDelay: '80ms',
+                }}
+              >
+                <p className="font-headline text-2xl sm:text-3xl lg:text-4xl font-light text-white/90 leading-tight mb-1">
+                  {slide.tagline}
+                </p>
+              </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              {/* Main headline (bold) */}
+              <div
+                className="transition-all duration-500"
+                style={{
+                  opacity: textVisible ? 1 : 0,
+                  transform: textVisible ? 'translateY(0)' : 'translateY(32px)',
+                  transitionDelay: '150ms',
+                }}
+              >
+                <h1 className="font-headline text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight mb-3 drop-shadow-lg">
+                  {slide.headline}
+                </h1>
+              </div>
+
+              {/* Marathi subtitle */}
+              <div
+                className="transition-all duration-500"
+                style={{
+                  opacity: textVisible ? 1 : 0,
+                  transform: textVisible ? 'translateY(0)' : 'translateY(28px)',
+                  transitionDelay: '200ms',
+                }}
+              >
+                <p className="font-devanagari text-white/70 text-base sm:text-lg mb-5">
+                  {slide.headlineMr}
+                </p>
+              </div>
+
+              {/* Divider */}
+              <div
+                className="transition-all duration-700"
+                style={{
+                  opacity: textVisible ? 1 : 0,
+                  transform: textVisible ? 'scaleX(1)' : 'scaleX(0)',
+                  transformOrigin: 'left',
+                  transitionDelay: '230ms',
+                }}
+              >
+                <div className="w-16 h-0.5 bg-harvest-gold mb-5 rounded-full" />
+              </div>
+
+              {/* Subtext */}
+              <div
+                className="transition-all duration-500"
+                style={{
+                  opacity: textVisible ? 1 : 0,
+                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
+                  transitionDelay: '270ms',
+                }}
+              >
+                <p className="text-white/75 text-base sm:text-lg leading-relaxed mb-8 max-w-xl">
+                  {slide.subtext}
+                </p>
+              </div>
+
+              {/* CTA Buttons */}
+              <div
+                className="flex flex-col sm:flex-row gap-4 transition-all duration-500"
+                style={{
+                  opacity: textVisible ? 1 : 0,
+                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
+                  transitionDelay: '320ms',
+                }}
+              >
                 <Link
                   href={`${prefix}/contact`}
-                  className="w-full sm:w-auto px-8 py-4 bg-orange-500 hover:bg-orange-400 text-white rounded-2xl font-bold shadow-lg hover:shadow-orange-500/40 transition-all duration-200 text-center text-base"
                   id="hero-enquire-btn"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-kisan-green hover:bg-kisan-green-light text-white font-bold rounded-xl shadow-lg hover:shadow-kisan-green/40 transition-all duration-200 text-sm sm:text-base"
                 >
-                  📞 {t('hero.cta1')}
+                  <span>{slide.cta1Icon}</span> {slide.cta1Label}
                 </Link>
                 <Link
                   href={`${prefix}/products`}
-                  className="w-full sm:w-auto px-8 py-4 bg-white/15 backdrop-blur-sm text-white border-2 border-white/40 hover:bg-white/25 rounded-2xl font-bold transition-all duration-200 text-center text-base"
                   id="hero-products-btn"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-white/12 backdrop-blur-sm text-white border border-white/40 hover:bg-white/22 rounded-xl font-bold transition-all duration-200 text-sm sm:text-base"
                 >
-                  🛒 {t('hero.cta2')}
+                  <span>{slide.cta2Icon}</span> {slide.cta2Label}
                 </Link>
               </div>
+
             </div>
-          </ScrollReveal>
-
-          {/* Right — Hero Image Card */}
-          <ScrollReveal variant="fadeRight" duration={0.8} delay={0.2}>
-            <div className="relative group max-w-md mx-auto md:max-w-none">
-              <div className="relative">
-                {/* Glow */}
-                <div className="absolute -inset-4 bg-harvest-gold/20 rounded-kisan-xl blur-3xl group-hover:bg-harvest-gold/30 group-hover:scale-110 transition-all duration-700" />
-
-                {/* Image Card */}
-                <div className="relative rounded-kisan-xl overflow-hidden shadow-2xl border-4 border-white/30 transition-all duration-500 group-hover:shadow-kisan-lg">
-                  <img
-                    src="/images/hero_farmer.png"
-                    alt="Indian farmer standing proudly in a flourishing agricultural field"
-                    className="w-full h-auto max-h-[600px] object-cover transition-all duration-700 group-hover:scale-105"
-                    style={{ aspectRatio: '4/5' }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-kisan-green-dark/40 via-transparent to-transparent" />
-                </div>
-              </div>
-
-              {/* Floating badge */}
-              <div className="absolute bottom-4 left-4 sm:-bottom-6 sm:-left-6 glass-card p-4 sm:p-5 rounded-2xl shadow-warm border border-white/40 max-w-[220px]">
-                <div className="flex gap-3 items-center">
-                  <div className="w-11 h-11 rounded-full bg-kisan-green/20 flex items-center justify-center text-kisan-green">
-                    <span
-                      className="material-symbols-outlined text-2xl"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
-                    >
-                      eco
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-black text-kisan-green leading-none">
-                      100%
-                    </p>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                      {t('trust.certifiedOrganic')}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
+          </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 animate-bounce opacity-70">
-          <span className="text-white/60 text-xs font-bold tracking-widest uppercase">Scroll</span>
-          <span className="material-symbols-outlined text-white/60 text-xl">expand_more</span>
+        {/* ── Right: Slide Number Indicator ── */}
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-4">
+          {HERO_SLIDES.map((s, i) => (
+            <button
+              key={i}
+              onClick={() => goToSlide(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className="group flex flex-col items-center gap-1 focus:outline-none"
+            >
+              <div
+                className={`w-px transition-all duration-500 ${
+                  i === activeSlide ? 'h-10 bg-harvest-gold' : 'h-6 bg-white/30 group-hover:bg-white/60'
+                }`}
+              />
+              <span
+                className={`text-xs font-black transition-all duration-300 ${
+                  i === activeSlide ? 'text-harvest-gold scale-110' : 'text-white/40 group-hover:text-white/70'
+                }`}
+              >
+                0{i + 1}
+              </span>
+            </button>
+          ))}
         </div>
+
+        {/* ── Bottom Controls Bar ── */}
+        <div className="absolute bottom-0 left-0 right-0 z-30">
+          {/* Progress bar */}
+          <div className="h-0.5 bg-white/10">
+            <div
+              className="h-full bg-harvest-gold transition-none"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          {/* Controls row */}
+          <div className="flex items-center justify-between px-6 sm:px-10 py-4 bg-gradient-to-t from-black/60 to-transparent">
+
+            {/* Left: dot indicators */}
+            <div className="flex items-center gap-3">
+              {HERO_SLIDES.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goToSlide(i)}
+                  aria-label={`Slide ${i + 1}`}
+                  className={`rounded-full transition-all duration-400 ${
+                    i === activeSlide
+                      ? 'w-8 h-2 bg-harvest-gold'
+                      : 'w-2 h-2 bg-white/40 hover:bg-white/70'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Center: slide counter */}
+            <div className="text-white/50 text-xs font-bold tracking-widest hidden sm:block">
+              <span className="text-white font-black text-sm">0{activeSlide + 1}</span>
+              <span className="mx-1">/</span>
+              0{HERO_SLIDES.length}
+            </div>
+
+            {/* Right: Prev / Next */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={prevSlideBtn}
+                aria-label="Previous slide"
+                className="w-9 h-9 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white/15 hover:border-white/60 transition-all duration-200"
+              >
+                <span className="material-symbols-outlined text-lg">arrow_back</span>
+              </button>
+              <button
+                onClick={nextSlide}
+                aria-label="Next slide"
+                className="w-9 h-9 rounded-full bg-harvest-gold flex items-center justify-center text-earth-brown hover:bg-harvest-gold-light transition-all duration-200 shadow-lg"
+              >
+                <span className="material-symbols-outlined text-lg">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Scroll indicator ── */}
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 hidden md:flex flex-col items-center gap-1 animate-bounce opacity-40">
+          <span className="text-white text-[10px] font-bold tracking-widest uppercase">Scroll</span>
+          <span className="material-symbols-outlined text-white text-lg">expand_more</span>
+        </div>
+
       </section>
 
       {/* ===== TRUST BAR ===== */}
