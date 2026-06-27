@@ -7,7 +7,7 @@ export default function WhatsAppButton() {
 
   return (
     <a
-      href="https://wa.me/919876543210?text=Hello%20Agri-Gen%2C%20I%20need%20advice%20on%20organic%20products"
+      href="https://wa.me/917385266728?text=Hello%20Agri-Gen%20Innovation%2C%20I%20want%20to%20know%20more%20about%20your%20products"
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float animate-whatsapp-pulse group"

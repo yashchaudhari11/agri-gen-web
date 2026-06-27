@@ -9,7 +9,7 @@ const localeConfig = [
   { code: 'mr', label: 'मराठी', flag: '🇮🇳' },
 ];
 
-export default function LanguageSwitcher({ variant = 'default' }) {
+export default function LanguageSwitcher({ variant = 'default', isTransparent = false }) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -29,21 +29,31 @@ export default function LanguageSwitcher({ variant = 'default' }) {
 
   if (variant === 'compact') {
     return (
-      <div className="flex items-center gap-1" id="language-switcher-compact">
-        {localeConfig.map((l) => (
-          <button
-            key={l.code}
-            onClick={() => switchLocale(l.code)}
-            className={`px-3 py-2 rounded-xl text-sm font-bold transition-all duration-200 touch-target ${
-              locale === l.code
-                ? 'bg-kisan-green text-white shadow-md'
-                : 'bg-cream text-text-secondary hover:bg-cream-dark'
-            }`}
-            aria-label={`Switch to ${l.label}`}
-          >
-            {l.label}
-          </button>
-        ))}
+      <div className={`flex items-center gap-1 ${isTransparent ? 'bg-white/10 p-1 rounded-2xl backdrop-blur-sm' : ''}`} id="language-switcher-compact">
+        {localeConfig.map((l) => {
+          let btnClass = 'bg-cream text-gray-500 hover:bg-cream-dark'; // default inactive
+          
+          if (isTransparent) {
+            btnClass = locale === l.code 
+              ? 'bg-white text-gray-900 shadow-sm' 
+              : 'bg-transparent text-white/90 hover:text-white hover:bg-white/20';
+          } else {
+            btnClass = locale === l.code
+              ? 'bg-kisan-green text-white shadow-md'
+              : 'bg-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-900';
+          }
+
+          return (
+            <button
+              key={l.code}
+              onClick={() => switchLocale(l.code)}
+              className={`px-3 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200 touch-target ${btnClass}`}
+              aria-label={`Switch to ${l.label}`}
+            >
+              {l.label}
+            </button>
+          );
+        })}
       </div>
     );
   }

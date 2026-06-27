@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar() {
@@ -15,6 +15,8 @@ export default function Navbar() {
   const locale = useLocale();
 
   const prefix = locale === 'en' ? '' : `/${locale}`;
+  const isHome = pathname === '/' || pathname === '/en' || pathname === '/hi' || pathname === '/mr';
+  const isTransparent = isHome && !scrolled;
 
   const navLinks = [
     { label: t('home'), href: `${prefix}/` },
@@ -33,21 +35,23 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-cream/95 backdrop-blur-xl shadow-lg shadow-earth-brown/5'
-          : 'bg-cream/90 backdrop-blur-md'
-      } border-b border-kisan-green/10`}
+          ? 'bg-white/95 backdrop-blur-lg shadow-sm border-b border-gray-100'
+          : isHome 
+            ? 'bg-gradient-to-b from-black/60 to-transparent border-transparent'
+            : 'bg-white/50 backdrop-blur-sm border-b border-transparent'
+      }`}
       id="main-nav"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? 'h-20' : 'h-24'}`}>
           {/* Logo */}
           <Link href={`${prefix}/`} className="flex items-center gap-3 group">
             <img
               src="/images/nav_logo.png"
               alt="AGRI-GEN Innovation Logo"
-              className="h-auto w-36 sm:w-40 object-contain transition-transform duration-300 group-hover:scale-105"
+              className={`h-auto w-36 sm:w-40 object-contain transition-all duration-500 group-hover:scale-105`}
             />
           </Link>
 
@@ -58,20 +62,23 @@ export default function Navbar() {
                 pathname === link.href ||
                 (link.href !== `${prefix}/` &&
                   pathname.startsWith(link.href));
+              
+              // Text color logic based on transparent mode
+              let textColorClass = 'text-gray-600 hover:text-kisan-green';
+              if (isTransparent) textColorClass = 'text-white/90 hover:text-white';
+              if (isActive && !isTransparent) textColorClass = 'text-kisan-green';
+              if (isActive && isTransparent) textColorClass = 'text-white';
+
               return (
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`text-sm font-bold transition-colors duration-200 relative group touch-target flex items-center ${
-                    isActive
-                      ? 'text-kisan-green'
-                      : 'text-text-secondary hover:text-kisan-green'
-                  }`}
+                  className={`text-[13px] uppercase tracking-wider font-semibold transition-all duration-300 relative group flex items-center px-1 py-1 ${textColorClass}`}
                 >
                   {link.label}
                   <span
-                    className={`absolute -bottom-1 left-0 h-0.5 bg-kisan-green transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    className={`absolute -bottom-1.5 left-0 h-[2px] rounded-t-md transition-all duration-300 ${isTransparent ? 'bg-white' : 'bg-kisan-green'} ${
+                      isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'
                     }`}
                   />
                 </Link>
@@ -81,15 +88,13 @@ export default function Navbar() {
 
           {/* Right side: Language Toggle + CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <LanguageSwitcher variant="compact" />
+            <LanguageSwitcher variant="compact" isTransparent={isTransparent} />
             <Link
               href={`${prefix}/contact`}
-              className="inline-flex items-center gap-2 bg-kisan-green text-white font-bold text-sm px-5 py-3 rounded-2xl btn-3d shadow-3d hover:shadow-3d-hover transition-all"
+              className="inline-flex items-center gap-2 bg-kisan-green hover:bg-[#328f2c] text-white font-semibold text-[14px] px-6 py-2.5 rounded-full shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ml-2"
               id="nav-enquire-btn"
             >
-              <span className="material-symbols-outlined text-lg">
-                call
-              </span>
+              <Phone size={16} />
               {t('enquire')}
             </Link>
           </div>
@@ -97,7 +102,7 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2.5 rounded-xl text-text-secondary hover:text-kisan-green hover:bg-cream transition-all duration-200 touch-target"
+            className={`lg:hidden p-2.5 rounded-xl transition-all duration-200 touch-target ${isTransparent ? 'text-white hover:bg-white/10' : 'text-gray-600 hover:text-kisan-green hover:bg-gray-50'}`}
             aria-label="Toggle menu"
             id="mobile-menu-toggle"
           >
@@ -141,9 +146,10 @@ export default function Navbar() {
           <Link
             href={`${prefix}/contact`}
             onClick={handleLinkClick}
-            className="mt-2 bg-kisan-green text-white font-bold text-sm px-5 py-3.5 rounded-2xl text-center btn-3d shadow-3d transition-all duration-200 touch-target"
+            className="mt-2 flex items-center justify-center gap-2 bg-kisan-green hover:bg-[#328f2c] text-white font-semibold text-[14px] px-6 py-3 rounded-full shadow-sm transition-all duration-300"
           >
-            📞 {t('enquire')}
+            <Phone size={16} />
+            {t('enquire')}
           </Link>
         </div>
       </div>

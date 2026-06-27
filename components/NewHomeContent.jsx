@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import FarmerStories from './FarmerStories';
-import FeaturedProducts from './FeaturedProducts';
+import ProductCategoryShowcase from './ProductCategoryShowcase';
 import ShopByCrop from './ShopByCrop';
 import WhyAgriGen from './WhyAgriGen';
 import NashikPride from './NashikPride';
@@ -20,7 +20,7 @@ const HERO_SLIDES = [
     tagline: 'Enriching Every Seed,',
     headline: 'Every Soil, Every Season',
     headlineMr: 'प्रत्येक बीज, प्रत्येक जमीन',
-    subtext: 'Science-backed organic inputs trusted by 1200+ farmers across Maharashtra.',
+    subtext: 'Certified organic inputs for every crop.',
     cta1Label: 'Enquire Now',
     cta1Icon: '📞',
     cta2Label: 'Explore Products',
@@ -35,7 +35,7 @@ const HERO_SLIDES = [
     tagline: 'Maximising Yield Through',
     headline: 'Ingenious Organic Chemistry',
     headlineMr: 'उत्पन्न वाढवा, निसर्ग जपा',
-    subtext: 'From soil health to crop protection — 500+ product SKUs engineered for Maharashtra\'s fields.',
+    subtext: 'From soil health to complete crop protection.',
     cta1Label: 'View Products',
     cta1Icon: '🛒',
     cta2Label: 'Learn More',
@@ -50,7 +50,7 @@ const HERO_SLIDES = [
     tagline: 'Empowering the Heart of India —',
     headline: 'The Indian Farmer',
     headlineMr: 'भारतीय शेतकरी — आमचा अभिमान',
-    subtext: 'Agri-Gen Innovation stands beside every farmer — from planting to harvest, season after season.',
+    subtext: 'With you from planting to harvest.',
     cta1Label: 'Our Story',
     cta1Icon: '🌾',
     cta2Label: 'Contact Us',
@@ -65,7 +65,7 @@ const HERO_SLIDES = [
     tagline: 'Leading to a',
     headline: 'Sustainable Green Future',
     headlineMr: 'शाश्वत हरित भविष्याकडे',
-    subtext: 'Zero harmful residues. Carbon-conscious manufacturing. Biodiversity protection — for generations.',
+    subtext: 'Zero residues. Sustainable farming for generations.',
     cta1Label: 'Our Mission',
     cta1Icon: '🎯',
     cta2Label: 'Get in Touch',
@@ -228,58 +228,6 @@ export default function NewHomeContent() {
                 </p>
               </div>
 
-              {/* Divider */}
-              <div
-                className="transition-all duration-700"
-                style={{
-                  opacity: textVisible ? 1 : 0,
-                  transform: textVisible ? 'scaleX(1)' : 'scaleX(0)',
-                  transformOrigin: 'left',
-                  transitionDelay: '230ms',
-                }}
-              >
-                <div className="w-16 h-0.5 bg-harvest-gold mb-5 rounded-full" />
-              </div>
-
-              {/* Subtext */}
-              <div
-                className="transition-all duration-500"
-                style={{
-                  opacity: textVisible ? 1 : 0,
-                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
-                  transitionDelay: '270ms',
-                }}
-              >
-                <p className="text-white/75 text-base sm:text-lg leading-relaxed mb-8 max-w-xl">
-                  {slide.subtext}
-                </p>
-              </div>
-
-              {/* CTA Buttons */}
-              <div
-                className="flex flex-col sm:flex-row gap-4 transition-all duration-500"
-                style={{
-                  opacity: textVisible ? 1 : 0,
-                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
-                  transitionDelay: '320ms',
-                }}
-              >
-                <Link
-                  href={`${prefix}/contact`}
-                  id="hero-enquire-btn"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-kisan-green hover:bg-kisan-green-light text-white font-bold rounded-xl shadow-lg hover:shadow-kisan-green/40 transition-all duration-200 text-sm sm:text-base"
-                >
-                  <span>{slide.cta1Icon}</span> {slide.cta1Label}
-                </Link>
-                <Link
-                  href={`${prefix}/products`}
-                  id="hero-products-btn"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-white/12 backdrop-blur-sm text-white border border-white/40 hover:bg-white/22 rounded-xl font-bold transition-all duration-200 text-sm sm:text-base"
-                >
-                  <span>{slide.cta2Icon}</span> {slide.cta2Label}
-                </Link>
-              </div>
-
             </div>
           </div>
         </div>
@@ -373,40 +321,6 @@ export default function NewHomeContent() {
 
       </section>
 
-      {/* ===== TRUST BAR ===== */}
-      <section className="bg-kisan-green py-6 sm:py-8" id="trust-bar">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-center">
-            {[
-              { icon: 'verified', label: t('trust.certifiedOrganic'), desc: t('trust.certifiedOrganicDesc') },
-              { icon: 'groups', label: t('trust.farmers'), desc: t('trust.farmersDesc') },
-              { icon: 'public', label: t('trust.districts'), desc: t('trust.districtsDesc') },
-              { icon: 'inventory_2', label: t('trust.products'), desc: t('trust.productsDesc') },
-            ].map((item) => (
-              <div key={item.icon} className="flex flex-col items-center gap-2">
-                <span
-                  className="material-symbols-outlined text-harvest-gold text-5xl"
-                  style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
-                >
-                  {item.icon}
-                </span>
-                <div>
-                  <p className="font-headline font-black text-sm text-white uppercase tracking-wide">
-                    {item.label}
-                  </p>
-                  <p className="text-xs text-white/70 font-devanagari">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CERTIFICATION RIBBON ===== */}
-      <CertificationRibbon />
-
       {/* ===== BUSINESS MODEL — Enhanced, B2C First ===== */}
       <section className="py-16 sm:py-20 lg:py-28 bg-warm-white overflow-hidden relative" id="business-model">
         {/* Organic topo background pattern */}
@@ -431,160 +345,82 @@ export default function NewHomeContent() {
             </div>
           </ScrollReveal>
 
-          <div className="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+          {/* ── Clean 2-col split: B2C left | B2B right ── */}
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 mt-12">
 
-            {/* Text Content — B2C first, then B2B */}
-            <div className="text-center lg:text-left order-1">
+            {/* B2C — Direct to Farmer */}
+            <ScrollReveal variant="fadeUp" delay={0.1}>
+              <div className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-400 min-h-[360px]">
+                <img
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  src="/images/farmer_1.png"
+                  alt="Direct to farmer — B2C"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-harvest-gold/20 to-transparent" />
 
-              {/* B2C Card — First (Direct to Farmer) */}
-              <ScrollReveal variant="fadeLeft" delay={0.1}>
-                <div className="group flex gap-5 sm:gap-6 items-start text-left mb-8 p-6 rounded-2xl bg-harvest-gold/8 border-2 border-harvest-gold/20 hover:border-harvest-gold/50 hover:shadow-lg transition-all duration-300">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-harvest-gold flex items-center justify-center shadow-3d-gold group-hover:scale-110 transition-transform duration-300">
-                    <span
-                      className="material-symbols-outlined text-earth-brown text-3xl"
-                      style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
-                    >
-                      storefront
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-harvest-gold text-earth-brown text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Direct to Farmer</span>
-                    </div>
-                    <h3 className="font-headline text-xl sm:text-2xl font-extrabold mb-2 text-pure-black">
-                      {t('business.b2cTitle')}
-                    </h3>
-                    <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
-                      {t('business.b2cDesc')}
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {['Direct Sales', 'Field Support', 'Agri Advisory'].map(tag => (
-                        <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-harvest-gold/20 text-harvest-gold-dark border border-harvest-gold/30">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </ScrollReveal>
-
-              {/* B2B Card — Second (Institutional) */}
-              <ScrollReveal variant="fadeLeft" delay={0.2}>
-                <div className="group flex gap-5 sm:gap-6 items-start text-left p-6 rounded-2xl bg-kisan-green/5 border-2 border-kisan-green/15 hover:border-kisan-green/40 hover:shadow-lg transition-all duration-300">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-kisan-green flex items-center justify-center shadow-3d group-hover:scale-110 transition-transform duration-300">
-                    <span
-                      className="material-symbols-outlined text-white text-3xl"
-                      style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
-                    >
-                      agriculture
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-kisan-green text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Institutional</span>
-                    </div>
-                    <h3 className="font-headline text-xl sm:text-2xl font-extrabold mb-2 text-pure-black">
-                      {t('business.b2bTitle')}
-                    </h3>
-                    <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
-                      {t('business.b2bDesc')}
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {['Bulk Supply', 'Export Quality', 'Custom Formulations'].map(tag => (
-                        <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-kisan-green/10 text-kisan-green border border-kisan-green/20">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </ScrollReveal>
-
-              {/* Stats strip */}
-              <ScrollReveal delay={0.3}>
-                <div className="mt-8 grid grid-cols-3 gap-3">
-                  {[
-                    { value: '1200+', label: 'Farmers Served', icon: 'groups' },
-                    { value: '50+', label: 'B2B Partners', icon: 'handshake' },
-                    { value: '500+', label: 'Product SKUs', icon: 'inventory_2' },
-                  ].map(stat => (
-                    <div key={stat.label} className="text-center p-4 rounded-xl bg-white border border-kisan-green/10 shadow-sm hover:shadow-warm hover:-translate-y-0.5 transition-all duration-300">
-                      <span
-                        className="material-symbols-outlined text-kisan-green text-2xl mb-1"
-                        style={{ fontVariationSettings: "'FILL' 1, 'wght' 500" }}
-                      >
-                        {stat.icon}
-                      </span>
-                      <p className="font-headline font-black text-xl text-pure-black leading-none">{stat.value}</p>
-                      <p className="text-text-muted text-[10px] font-semibold uppercase tracking-wide mt-0.5">{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Image Grid — B2C visual first (storefront top), B2B below */}
-            <div className="relative order-2">
-              <div className="grid grid-cols-2 gap-4 sm:gap-6">
-
-                {/* Column 1 — B2C imagery first */}
-                <div className="space-y-4 sm:space-y-6">
-                  {/* Farmer/storefront image (B2C) */}
-                  <div className="aspect-square rounded-kisan overflow-hidden shadow-warm hover:translate-y-[-8px] transition-transform duration-300 relative group">
-                    <img
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      src="/images/farmer_1.png"
-                      alt="Happy farmer using Agri-Gen products"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-harvest-gold/40 to-transparent" />
-                    <div className="absolute bottom-3 left-3">
-                      <span className="bg-harvest-gold text-earth-brown text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">B2C</span>
-                    </div>
-                  </div>
-                  {/* B2B icon panel */}
-                  <div className="aspect-square sm:aspect-[3/4] bg-kisan-green/5 rounded-kisan p-5 sm:p-8 flex flex-col justify-end border-2 border-kisan-green/10 hover:border-kisan-green/30 transition-colors">
-                    <span
-                      className="material-symbols-outlined text-kisan-green text-5xl sm:text-6xl mb-4"
-                      style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
-                    >
-                      agriculture
-                    </span>
-                    <h4 className="font-headline text-base sm:text-xl font-bold text-text-primary">
-                      {t('business.b2bTitle')}
-                    </h4>
-                  </div>
+                {/* Badge */}
+                <div className="absolute top-5 left-5">
+                  <span className="inline-flex items-center gap-1.5 bg-harvest-gold text-earth-brown text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-widest">
+                    <span className="w-1.5 h-1.5 rounded-full bg-earth-brown/60" />Direct to Farmer
+                  </span>
                 </div>
 
-                {/* Column 2 — B2C panel + field image */}
-                <div className="space-y-4 sm:space-y-6 pt-8 sm:pt-12">
-                  {/* B2C icon panel */}
-                  <div className="aspect-square sm:aspect-[3/4] bg-harvest-gold/10 rounded-kisan p-5 sm:p-8 flex flex-col justify-end border-2 border-harvest-gold/20 hover:border-harvest-gold/40 transition-colors">
-                    <span
-                      className="material-symbols-outlined text-harvest-gold-dark text-5xl sm:text-6xl mb-4"
-                      style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
-                    >
-                      storefront
-                    </span>
-                    <h4 className="font-headline text-base sm:text-xl font-bold text-text-primary">
-                      {t('business.b2cTitle')}
-                    </h4>
-                  </div>
-                  {/* Field image (B2B / supply chain) */}
-                  <div className="aspect-square rounded-kisan overflow-hidden shadow-warm hover:translate-y-[-8px] transition-transform duration-300 relative group">
-                    <img
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      src="/images/field_wide.png"
-                      alt="Lush agricultural field in Nashik"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-kisan-green/40 to-transparent" />
-                    <div className="absolute bottom-3 left-3">
-                      <span className="bg-kisan-green text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">B2B</span>
-                    </div>
+                {/* Content at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="font-headline text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight">
+                    {t('business.b2cTitle')}
+                  </h3>
+                  <p className="text-white/75 text-sm leading-relaxed mb-4">{t('business.b2cDesc')}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {['Direct Sales', 'Field Support', 'Agri Advisory'].map(tag => (
+                      <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-harvest-gold/25 text-harvest-gold border border-harvest-gold/40">{tag}</span>
+                    ))}
                   </div>
                 </div>
-
               </div>
-            </div>
+            </ScrollReveal>
+
+            {/* B2B — Institutional / Bulk */}
+            <ScrollReveal variant="fadeUp" delay={0.2}>
+              <div className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-400 min-h-[360px]">
+                <img
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  src="/images/field_wide.png"
+                  alt="Bulk B2B supply"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-kisan-green/25 to-transparent" />
+
+                {/* Badge */}
+                <div className="absolute top-5 left-5">
+                  <span className="inline-flex items-center gap-1.5 bg-kisan-green text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-widest">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/60" />Institutional
+                  </span>
+                </div>
+
+                {/* Content at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="font-headline text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight">
+                    {t('business.b2bTitle')}
+                  </h3>
+                  <p className="text-white/75 text-sm leading-relaxed mb-4">{t('business.b2bDesc')}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {['Bulk Supply', 'Export Quality', 'Custom Formulations'].map(tag => (
+                      <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-kisan-green/30 text-white border border-kisan-green/40">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+
           </div>
         </div>
       </section>
 
+      {/* ===== CERTIFICATION RIBBON ===== */}
+      <CertificationRibbon />
+      
       {/* ===== DELIVERING EXCELLENCE — Original Style, now directly after Business Model ===== */}
       <section
         className="relative py-20 sm:py-28 lg:py-36 overflow-hidden"
@@ -663,8 +499,8 @@ export default function NewHomeContent() {
                 <div className="w-14 h-14 rounded-2xl bg-harvest-gold flex items-center justify-center mb-4 shadow-lg">
                   <span className="material-symbols-outlined text-earth-brown text-3xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}>workspace_premium</span>
                 </div>
-                <h4 className="font-headline font-extrabold text-xl text-white mb-2">{t('values.quality')}</h4>
-                <p className="text-white/75 text-sm leading-relaxed">Every product meets the highest ISO 9001:2015 certified quality standards before reaching your farm.</p>
+                <h4 className="font-headline font-extrabold text-xl text-white mb-1">{t('values.quality')}</h4>
+                <p className="text-white/70 text-xs">ISO 9001:2015 certified — every batch, every time.</p>
               </div>
             </div>
 
@@ -679,8 +515,8 @@ export default function NewHomeContent() {
                   <div className="w-12 h-12 rounded-2xl bg-kisan-green/10 flex items-center justify-center mb-4">
                     <span className="material-symbols-outlined text-kisan-green text-2xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}>handshake</span>
                   </div>
-                  <h4 className="font-headline font-extrabold text-lg text-pure-black mb-2">{t('values.trust')}</h4>
-                  <p className="text-text-secondary text-sm leading-relaxed">Built on transparent relationships with 1200+ farmers across Maharashtra.</p>
+                  <h4 className="font-headline font-extrabold text-lg text-pure-black mb-1">{t('values.trust')}</h4>
+                  <p className="text-text-secondary text-xs">Transparent partnerships across Maharashtra.</p>
                 </div>
               </div>
             </div>
@@ -694,8 +530,8 @@ export default function NewHomeContent() {
                   <span className="material-symbols-outlined text-harvest-gold text-3xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}>verified_user</span>
                 </div>
                 <div>
-                  <h4 className="font-headline font-extrabold text-xl text-white mb-2">{t('values.accountability')}</h4>
-                  <p className="text-white/75 text-sm leading-relaxed">Full traceability from production to your field — we stand behind every product we supply.</p>
+                  <h4 className="font-headline font-extrabold text-xl text-white mb-1">{t('values.accountability')}</h4>
+                  <p className="text-white/70 text-xs">Full traceability — production to your field.</p>
                   <div className="mt-4 flex items-center gap-2">
                     <div className="h-1.5 flex-1 rounded-full bg-white/20">
                       <div className="h-1.5 w-5/6 rounded-full bg-harvest-gold" />
@@ -713,8 +549,8 @@ export default function NewHomeContent() {
                   <div className="w-12 h-12 rounded-2xl bg-harvest-gold/15 flex items-center justify-center mb-4">
                     <span className="material-symbols-outlined text-harvest-gold-dark text-2xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}>groups</span>
                   </div>
-                  <h4 className="font-headline font-extrabold text-lg text-pure-black mb-2">{t('values.honouring')}</h4>
-                  <p className="text-text-secondary text-sm leading-relaxed">Every farmer is a partner. We invest in their success, knowledge, and prosperity.</p>
+                  <h4 className="font-headline font-extrabold text-lg text-pure-black mb-1">{t('values.honouring')}</h4>
+                  <p className="text-text-secondary text-xs">Every farmer is a partner in our growth.</p>
                   <div className="mt-4 flex gap-1.5">
                     {[1,2,3,4,5].map(i => (
                       <div key={i} className="h-2 flex-1 rounded-full bg-harvest-gold/80" />
@@ -736,16 +572,8 @@ export default function NewHomeContent() {
                 <div className="w-14 h-14 rounded-2xl bg-field-green flex items-center justify-center mb-4 shadow-lg">
                   <span className="material-symbols-outlined text-white text-3xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}>eco</span>
                 </div>
-                <h4 className="font-headline font-extrabold text-2xl text-white mb-3">{t('values.environmental')}</h4>
-                <p className="text-white/80 text-sm leading-relaxed mb-4">We protect the land for future generations — our organic inputs restore soil biology, protect water sources, and support biodiversity across Maharashtra.</p>
-                <div className="space-y-2">
-                  {['Zero harmful chemicals', 'Carbon-conscious manufacturing', 'Biodiversity protection'].map(item => (
-                    <div key={item} className="flex items-center gap-2">
-                      <span className="text-field-green text-sm font-bold">✅</span>
-                      <span className="text-white/80 text-xs">{item}</span>
-                    </div>
-                  ))}
-                </div>
+                <h4 className="font-headline font-extrabold text-2xl text-white mb-2">{t('values.environmental')}</h4>
+                <p className="text-white/70 text-xs leading-relaxed">Zero residues. Soil-first. Biodiversity protected.</p>
               </div>
             </div>
 
@@ -756,8 +584,8 @@ export default function NewHomeContent() {
       {/* ===== SHOP BY CROP ===== */}
       <ShopByCrop />
 
-      {/* ===== FEATURED PRODUCTS ===== */}
-      <FeaturedProducts />
+      {/* ===== PRODUCT CATEGORY SHOWCASE ===== */}
+      <ProductCategoryShowcase />
 
       {/* ===== WHY AGRI-GEN ===== */}
       <WhyAgriGen />

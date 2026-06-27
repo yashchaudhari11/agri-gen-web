@@ -7,64 +7,57 @@ import { useLocale } from 'next-intl';
 import { products, categories } from '@/lib/products-data';
 import ScrollReveal, { StaggerContainer, StaggerItem } from './ScrollReveal';
 
-const BADGE_STYLES = {
-  bestseller: 'bg-harvest-gold text-earth-brown',
-  highyield: 'bg-kisan-green text-white',
-  eco: 'bg-field-green text-white',
-  imported: 'bg-blue-600 text-white',
-  spectrum: 'bg-purple-600 text-white',
-  b2b: 'bg-kisan-green-dark text-white',
-};
-
-const CATEGORY_ICONS = {
-  'All Products': '🌿',
-  'Biostimulants': '🧬',
-  'Soil Conditioners': '🌱',
-  'Micronutrients': '🔬',
-  'Plant Growth Promoters': '📈',
-  'B2B / Bulk Supply': '🤝',
+const CATEGORY_COLORS = {
+  'All Products':          { bg: '#3DAA35', text: '#fff' },
+  'Biostimulants':         { bg: '#3DAA35', text: '#fff' },
+  'Soil Conditioners':     { bg: '#E8A320', text: '#fff' },
+  'Micronutrients':        { bg: '#1A56B4', text: '#fff' },
+  'Plant Growth Promoters':{ bg: '#8B5CF6', text: '#fff' },
+  'B2B / Bulk Supply':     { bg: '#0F2414', text: '#fff' },
 };
 
 function ProductCard({ product }) {
   const locale = useLocale();
   const prefix = locale === 'en' ? '' : `/${locale}`;
   const [imgError, setImgError] = useState(false);
+  const cat = CATEGORY_COLORS[product.category] || { bg: '#3DAA35', text: '#fff' };
 
   return (
-    <div className="group bg-white border-2 border-kisan-green/8 rounded-[24px] overflow-hidden hover:border-kisan-green/35 hover:shadow-kisan-lg transition-all duration-300 flex flex-col hover:-translate-y-1">
-
-      {/* Product Image */}
-      <div className="relative h-56 overflow-hidden bg-cream flex-shrink-0">
+    <Link
+      href={`${prefix}/products/${product.id}`}
+      className="group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 flex flex-col"
+    >
+      {/* Image */}
+      <div className="relative h-52 bg-gray-50 overflow-hidden flex-shrink-0">
         {!imgError ? (
           <Image
             src={product.image}
-            alt={product.name}
+            alt={product.nameShort || product.name}
             fill
-            className="object-cover object-top group-hover:scale-105 transition-transform duration-600"
+            className="object-contain p-4 group-hover:scale-105 transition-transform duration-600"
             unoptimized
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-kisan-green/10 to-kisan-green/20 flex items-center justify-center">
-            <span className="text-5xl">🌿</span>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-5xl opacity-30">🌿</span>
           </div>
         )}
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
 
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-          <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full ${BADGE_STYLES[product.badgeType] || 'bg-kisan-green text-white'}`}>
-            {product.badge}
-          </span>
-          <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-black/50 text-white backdrop-blur-sm">
+        {/* Single category badge */}
+        <div className="absolute top-3 left-3">
+          <span
+            className="text-[10px] font-extrabold px-2.5 py-1 rounded-full"
+            style={{ backgroundColor: cat.bg, color: cat.text }}
+          >
             {product.category}
           </span>
         </div>
 
-        {/* Origin tag */}
+        {/* Origin */}
         {product.origin && (
-          <div className="absolute bottom-3 right-3">
+          <div className="absolute top-3 right-3">
             <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-black/50 text-white backdrop-blur-sm">
               📍 {product.origin}
             </span>
@@ -73,54 +66,42 @@ function ProductCard({ product }) {
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col gap-3 flex-grow">
+      <div className="p-5 flex flex-col flex-grow gap-3">
         <div>
-          <h3 className="font-headline font-bold text-pure-black text-sm sm:text-base leading-tight mb-1.5 group-hover:text-kisan-green transition-colors duration-200">
+          <h3 className="font-headline font-bold text-gray-900 text-sm leading-tight mb-1.5 group-hover:text-[#3DAA35] transition-colors duration-200">
             {product.nameShort || product.name}
           </h3>
-          <p className="font-devanagari text-kisan-green text-[11px] mb-2">{product.tagline?.split('.')[0]}</p>
-          <p className="text-text-secondary text-xs leading-relaxed line-clamp-2">
+          <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">
             {product.description}
           </p>
         </div>
 
-        {/* Key specs */}
-        <div className="flex flex-wrap gap-1.5">
-          {(product.benefits || []).slice(0, 3).map((b, i) => (
-            <span key={i} className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-kisan-green/8 text-kisan-green border border-kisan-green/15">
-              ✓ {b}
-            </span>
-          ))}
-        </div>
-
         {/* Pack sizes */}
-        {product.packSizes && product.packSizes.length > 0 && (
+        {product.packSizes?.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {product.packSizes.map((ps, i) => (
-              <span key={i} className="text-[9px] font-semibold px-2 py-0.5 rounded bg-cream text-text-muted border border-kisan-green/10">
+              <span key={i} className="text-[9px] font-semibold px-2 py-0.5 rounded bg-gray-50 text-gray-400 border border-gray-100">
                 {ps}
               </span>
             ))}
           </div>
         )}
 
-        {/* Price + CTA */}
-        <div className="mt-auto pt-3 border-t border-kisan-green/8 flex items-center justify-between gap-3">
-          <div>
-            <p className="text-kisan-green font-extrabold text-sm">{product.price}</p>
-            {product.priceNote && (
-              <p className="text-text-muted text-[9px]">{product.priceNote}</p>
-            )}
-          </div>
-          <a
-            href="tel:7385266728"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-kisan-green hover:bg-kisan-green-dark text-white text-xs font-bold rounded-xl transition-all duration-200 shadow-sm hover:shadow-md whitespace-nowrap"
+        {/* CTA */}
+        <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+          <p className="text-xs font-bold text-gray-400">
+            {product.price}
+          </p>
+          <span
+            className="inline-flex items-center gap-1 text-[11px] font-bold transition-colors duration-200"
+            style={{ color: '#3DAA35' }}
           >
-            📞 Enquire
-          </a>
+            View Details
+            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -128,108 +109,90 @@ export default function ProductsSection() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('All Products');
 
-  const filtered = useMemo(() => {
-    return products.filter((p) => {
+  const filtered = useMemo(() =>
+    products.filter((p) => {
       const matchCat = activeCategory === 'All Products' || p.category === activeCategory;
       const matchSearch =
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.description.toLowerCase().includes(search.toLowerCase()) ||
         (p.category || '').toLowerCase().includes(search.toLowerCase());
       return matchCat && matchSearch;
-    });
-  }, [search, activeCategory]);
+    }),
+    [search, activeCategory]
+  );
 
   return (
-    <div className="bg-warm-white">
+    <div className="bg-white">
 
-      {/* ===== Page Hero Banner ===== */}
-      <div className="relative overflow-hidden min-h-[280px] sm:min-h-[340px]">
+      {/* ── Hero Banner ── */}
+      <div className="relative h-[42vh] min-h-[280px] max-h-[420px] overflow-hidden">
         <img
           src="/images/field_wide.png"
-          alt="Agri-Gen product fields"
+          alt="Agri-Gen products"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-kisan-green-dark/92 via-kisan-green-dark/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
-          <span className="inline-flex items-center gap-2 w-fit px-4 py-1.5 mb-5 text-xs font-bold tracking-widest uppercase bg-white/15 text-white rounded-full border border-white/30 backdrop-blur-sm">
-            <span className="w-2 h-2 rounded-full bg-harvest-gold animate-pulse" />
-            Our Product Range
-          </span>
-          <h1 className="font-headline font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight mb-4 max-w-2xl drop-shadow-lg">
-            Premium Agri-Input{' '}
-            <span className="text-harvest-gold italic">Solutions</span>
-          </h1>
-          <p className="text-white/80 text-base sm:text-lg max-w-xl leading-relaxed mb-2">
-            Certified organic biostimulants, soil conditioners, micronutrients & plant growth promoters — engineered for Maharashtra's farmers.
-          </p>
-          <p className="font-devanagari text-harvest-gold text-base">
-            प्रीमियम सेंद्रिय शेती उत्पादने — प्रत्येक पीकासाठी
-          </p>
-
-          {/* Quick stats */}
-          <div className="mt-8 flex flex-wrap gap-4">
-            {[
-              { n: '500+', l: 'Product SKUs' },
-              { n: '1200+', l: 'Farmers Served' },
-              { n: 'ISO', l: '9001:2015 Certified' },
-              { n: '50+', l: 'Districts' },
-            ].map(s => (
-              <div key={s.l} className="flex items-center gap-2 bg-white/12 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">
-                <span className="text-harvest-gold font-black text-sm">{s.n}</span>
-                <span className="text-white/70 text-xs">{s.l}</span>
-              </div>
-            ))}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20" />
+        <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 lg:px-20">
+          <div className="max-w-7xl mx-auto w-full">
+            <p className="text-white/50 text-xs font-bold tracking-[0.3em] uppercase mb-4">
+              Our Products
+            </p>
+            <h1 className="font-headline font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight mb-3 drop-shadow-lg">
+              Premium Agri-Input{' '}
+              <span style={{ color: '#3DAA35' }}>Solutions</span>
+            </h1>
+            <p className="font-devanagari text-white/60 text-base sm:text-lg">
+              ISO प्रमाणित सेंद्रिय कृषी उत्पादने — शेतकऱ्यांसाठी
+            </p>
           </div>
         </div>
       </div>
 
-      {/* ===== Products Section ===== */}
-      <section id="products" className="py-14 sm:py-18 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* ── Products Section ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18 lg:py-20">
 
-        {/* Search + Filters Row */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          {/* Search */}
+        {/* Search + Filters */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-8 items-start sm:items-center">
           <div className="relative flex-1 max-w-md">
-            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted text-xl">search</span>
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 text-xl">search</span>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search products..."
-              className="w-full bg-white border-2 border-kisan-green/12 text-text-primary placeholder-text-muted text-sm pl-11 pr-5 py-3.5 rounded-2xl focus:outline-none focus:border-kisan-green/40 focus:shadow-kisan transition-all duration-200"
+              className="w-full bg-white border border-gray-200 text-gray-800 placeholder-gray-300 text-sm pl-11 pr-5 py-3 rounded-xl focus:outline-none focus:border-[#3DAA35] transition-all duration-200"
             />
           </div>
-
-          {/* Result count */}
-          <div className="flex items-center gap-2 text-text-muted text-sm">
-            <span className="material-symbols-outlined text-kisan-green text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>inventory_2</span>
-            <span><strong className="text-kisan-green">{filtered.length}</strong> product{filtered.length !== 1 ? 's' : ''} found</span>
-          </div>
+          <p className="text-gray-400 text-sm">
+            <strong className="text-[#3DAA35]">{filtered.length}</strong> product{filtered.length !== 1 ? 's' : ''} found
+          </p>
         </div>
 
         {/* Category Pills */}
         <div className="flex flex-wrap gap-2 mb-10">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold rounded-xl border-2 transition-all duration-200 ${
-                activeCategory === cat
-                  ? 'bg-kisan-green text-white border-kisan-green shadow-md'
-                  : 'bg-white text-text-secondary border-kisan-green/12 hover:border-kisan-green/35 hover:text-kisan-green hover:bg-kisan-green/5'
-              }`}
-            >
-              <span>{CATEGORY_ICONS[cat] || '🌿'}</span>
-              {cat}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const c = CATEGORY_COLORS[cat];
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className="px-4 py-2 text-xs font-bold rounded-xl border transition-all duration-200"
+                style={
+                  isActive
+                    ? { backgroundColor: c?.bg || '#3DAA35', color: '#fff', borderColor: c?.bg || '#3DAA35' }
+                    : { backgroundColor: '#fff', color: '#6b7280', borderColor: '#e5e7eb' }
+                }
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Product Grid */}
+        {/* Grid */}
         {filtered.length > 0 ? (
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.08}>
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" staggerDelay={0.06}>
             {filtered.map((product) => (
               <StaggerItem key={product.id}>
                 <ProductCard product={product} />
@@ -237,72 +200,68 @@ export default function ProductsSection() {
             ))}
           </StaggerContainer>
         ) : (
-          <div className="text-center py-24 text-text-secondary">
-            <div className="text-5xl mb-4">🌿</div>
-            <p className="text-base font-medium mb-2">No products found</p>
-            <p className="text-sm text-text-muted">Try a different search or filter category</p>
+          <div className="text-center py-24 text-gray-400">
+            <p className="text-4xl mb-4">🌿</p>
+            <p className="text-sm font-medium mb-2">No products found</p>
             <button
               onClick={() => { setSearch(''); setActiveCategory('All Products'); }}
-              className="mt-4 px-6 py-2.5 bg-kisan-green text-white text-sm font-bold rounded-xl hover:bg-kisan-green-dark transition-colors"
+              className="mt-4 px-6 py-2 text-xs font-bold rounded-xl border border-[#3DAA35] text-[#3DAA35] hover:bg-[#3DAA35] hover:text-white transition-colors"
             >
               Clear Filters
             </button>
           </div>
         )}
 
-        {/* ===== B2B CTA Banner ===== */}
+        {/* B2B CTA */}
         <ScrollReveal delay={0.1}>
-          <div className="mt-20 relative rounded-[28px] overflow-hidden">
-            <img src="/images/facility.png" alt="Agri-Gen facility" className="absolute inset-0 w-full h-full object-cover opacity-20" />
-            <div className="relative z-10 bg-gradient-to-r from-kisan-green-dark to-kisan-green p-8 sm:p-12 lg:p-16">
-              <div className="max-w-4xl mx-auto text-center">
-                <span className="inline-block px-4 py-1.5 mb-5 text-xs font-bold tracking-widest uppercase bg-white/15 text-white rounded-full border border-white/25">
-                  🤝 Premium B2B Partnership
-                </span>
-                <h2 className="font-headline font-extrabold text-3xl sm:text-4xl text-white mb-3 leading-tight">
-                  Bulk Supply & Custom Formulations
-                </h2>
-                <p className="font-devanagari text-harvest-gold text-base mb-5">थोक पुरवठा आणि कस्टम फॉर्म्युलेशन</p>
-                <p className="text-white/80 text-base sm:text-lg mb-8 max-w-2xl mx-auto">
-                  White Label Manufacturing · Contract Manufacturing · Private Label Packaging · Co-Marketing Models
-                </p>
-                <div className="flex flex-wrap gap-4 justify-center">
-                  <a
-                    href="tel:7385266728"
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-harvest-gold hover:bg-harvest-gold-light text-earth-brown font-extrabold rounded-xl shadow-lg transition-all duration-200"
-                  >
-                    📞 Call: 7385266728
-                  </a>
-                  <a
-                    href="https://wa.me/917385266728"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-white/15 backdrop-blur-sm text-white border border-white/40 hover:bg-white/25 font-bold rounded-xl transition-all duration-200"
-                  >
-                    💬 WhatsApp Enquiry
-                  </a>
+          <div
+            className="mt-20 rounded-2xl overflow-hidden px-8 sm:px-14 py-12 sm:py-16 text-center"
+            style={{ background: 'linear-gradient(135deg, #0F2414 0%, #1B4332 60%, #1A3A6B 100%)' }}
+          >
+            <p className="text-white/40 text-[10px] font-bold tracking-[0.35em] uppercase mb-5">
+              🤝 Premium B2B Partnership
+            </p>
+            <h2 className="font-headline font-extrabold text-3xl sm:text-4xl text-white mb-3 leading-tight">
+              Bulk Supply &amp;{' '}
+              <span style={{ color: '#E8A320' }}>Custom Formulations</span>
+            </h2>
+            <p className="font-devanagari text-white/40 text-base mb-8">
+              थोक पुरवठा आणि कस्टम फॉर्म्युलेशन
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center mb-10">
+              <a
+                href="tel:7385266728"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-200"
+                style={{ backgroundColor: '#E8A320', color: '#1a1a0a' }}
+              >
+                📞 Call: 73852 66728
+              </a>
+              <a
+                href="/documents/Brochure.pdf"
+                download
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/10 backdrop-blur-sm text-white border border-white/25 hover:bg-white/20 font-bold text-sm rounded-xl transition-all duration-200"
+              >
+                <span className="material-symbols-outlined text-[#E8A320] text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>download</span>
+                Download Brochure
+              </a>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 max-w-2xl mx-auto">
+              {[
+                { icon: 'local_shipping', label: 'Bulk Supply' },
+                { icon: 'branding_watermark', label: 'White Label' },
+                { icon: 'precision_manufacturing', label: 'Contract Mfg' },
+                { icon: 'inventory_2', label: 'Private Label' },
+                { icon: 'handshake', label: 'Co-Marketing' },
+              ].map((s) => (
+                <div key={s.label} className="flex flex-col items-center gap-2 bg-white/8 rounded-xl p-3.5 border border-white/10">
+                  <span className="material-symbols-outlined text-[#E8A320] text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>{s.icon}</span>
+                  <span className="text-white/70 text-[10px] font-bold text-center">{s.label}</span>
                 </div>
-
-                {/* B2B services row */}
-                <div className="mt-10 grid grid-cols-2 sm:grid-cols-5 gap-4">
-                  {[
-                    { icon: 'local_shipping', label: 'Bulk Supply' },
-                    { icon: 'branding_watermark', label: 'White Label' },
-                    { icon: 'precision_manufacturing', label: 'Contract Mfg' },
-                    { icon: 'inventory_2', label: 'Private Label' },
-                    { icon: 'handshake', label: 'Co-Marketing' },
-                  ].map(s => (
-                    <div key={s.label} className="flex flex-col items-center gap-2 bg-white/10 rounded-2xl p-4 border border-white/15">
-                      <span className="material-symbols-outlined text-harvest-gold text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>{s.icon}</span>
-                      <span className="text-white text-xs font-bold text-center">{s.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </ScrollReveal>
-      </section>
+      </div>
     </div>
   );
 }
